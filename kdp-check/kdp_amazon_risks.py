@@ -225,7 +225,7 @@ def amazon_risks(path, chapters=0):
         if tiny_runs:
             findings.append(_finding(
                 "KDP_TINY_TYPE", "A11", "STOP", "Some words are smaller than 7 point",
-                f"{tiny_runs} piece(s) of text are set under 7 pt. Amazon rejects any text smaller than 7 pt.",
+                ("One piece of text is" if tiny_runs == 1 else f"{tiny_runs} pieces of text are") + " set under 7 pt. Amazon rejects any text smaller than 7 pt.",
                 "Select that text in Word and make it at least 7 pt, or let Quick Formatter reset the type.",
                 True, "FONTS"))
 
@@ -297,7 +297,7 @@ def amazon_risks(path, chapters=0):
         if hidden:
             findings.append(_finding(
                 "KDP_HIDDEN_TEXT", "A17", "WARN", "Hidden text is in the file",
-                f"{hidden} piece(s) of text are set to Hidden. Amazon asks for no invisible content, and hidden words can print.",
+                ("One piece of text is" if hidden == 1 else f"{hidden} pieces of text are") + " set to Hidden. Amazon asks for no invisible content, and hidden words can print.",
                 "In Word, turn on Show/Hide, find the hidden words, and delete them or un-hide them. Do this before using Quick Formatter too, because it prints hidden words.",
                 False, "SAVE"))
 

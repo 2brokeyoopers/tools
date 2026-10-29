@@ -240,7 +240,7 @@ function render(r) {
   if (f.can_format) {
     html += '<div class="offer"><h2>Let the formatter do the fiddly part</h2>';
     html += fixable.length
-      ? '<p>KDP Quick Formatter fixes ' + fixable.length + ' of the ' + a.findings.length + ' items above on its own, and builds the title page, copyright page, contents, page numbers and chapter starts. You get a print-ready Word file for Amazon, for $19.99.</p>'
+      ? '<p>KDP Quick Formatter fixes ' + (fixable.length === a.findings.length ? (a.findings.length === 1 ? 'the item above' : 'all ' + a.findings.length + ' items above') : fixable.length + ' of the ' + a.findings.length + ' items above') + ' on its own, and builds the title page, copyright page, contents, page numbers and chapter starts. You get a print-ready Word file for Amazon, for $19.99.</p>'
       : '<p>KDP Quick Formatter turns this manuscript into a print-ready Word file for Amazon, for $19.99, with the title page, copyright page, contents, page numbers and chapter starts done for you.</p>';
     html += '<p class="facts">A Windows 10 or 11 program. You need Microsoft Word to open the finished file.</p>';
     html += '<a class="btn" href="' + esc(r.formatter_url) + '" target="_blank" rel="noopener">Get KDP Quick Formatter</a></div>';
