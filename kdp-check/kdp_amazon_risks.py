@@ -19,7 +19,7 @@ import zipfile
 from html import unescape
 from pathlib import Path
 
-RISKS_VERSION = "1.0.0"
+RISKS_VERSION = "1.1.0"
 KDP_HELP = "https://kdp.amazon.com/en_US/help/topic/"
 
 # KDP US trim sizes in inches (AGREED SPEC A3).
@@ -298,8 +298,8 @@ def amazon_risks(path, chapters=0):
             findings.append(_finding(
                 "KDP_HIDDEN_TEXT", "A17", "WARN", "Hidden text is in the file",
                 ("One piece of text is" if hidden == 1 else f"{hidden} pieces of text are") + " set to Hidden. Amazon asks for no invisible content, and hidden words can print.",
-                "In Word, turn on Show/Hide, find the hidden words, and delete them or un-hide them. Do this before using Quick Formatter too, because it prints hidden words.",
-                False, "SAVE"))
+                "In Word, turn on Show/Hide, find the hidden words, and delete them or un-hide them, or let Quick Formatter leave them out.",
+                True, "SAVE"))
 
         # A25 - template placeholder text.
         low_text = body_text.lower()

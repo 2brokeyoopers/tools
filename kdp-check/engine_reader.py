@@ -637,7 +637,7 @@ class RichRun:
     entries, and nothing warned the author. They are carried now.
     """
     __slots__ = ("text", "bold", "italic", "underline", "strike",
-                 "small_caps", "superscript", "subscript", "font")
+                 "small_caps", "superscript", "subscript", "font", "caps")
 
     def __init__(self, text, bold=False, italic=False, underline=False,
                  strike=False, small_caps=False, superscript=False,
@@ -654,11 +654,17 @@ class RichRun:
         self.small_caps = small_caps
         self.superscript = superscript
         self.subscript = subscript
+        # v1.1 2026-10-28: Word's All Caps box (w:caps). Lost in v1.0, so
+        # "get off my porch" set in All Caps printed in lower case (second
+        # blind audit D7). The letters are not changed; Word draws them as
+        # capitals, as it did in the manuscript.
+        self.caps = False
 
 
 class ContentParagraph:
     """A paragraph that preserves inline formatting and images."""
-    __slots__ = ("runs", "images", "is_scene_break", "is_epigraph", "is_caption", "list_kind", "list_level", "is_subhead", "is_title_style", "table_pos", "block_style")
+    __slots__ = ("runs", "images", "is_scene_break", "is_epigraph", "is_caption", "list_kind", "list_level", "is_subhead", "is_title_style", "table_pos", "block_style",
+                 "list_info")  # list_info: v1.1 2026-10-28, see _v11_list_info
 
     def __init__(self, runs=None, images=None, is_scene_break=False,
                  is_epigraph=False, is_caption=False, list_kind=None, is_subhead=False,
@@ -688,6 +694,9 @@ class ContentParagraph:
         # short line (a sign-off). The formatter keeps that setup instead of
         # guessing what is a letter. None for everything else.
         self.block_style = None
+        # v1.1 2026-10-28: which Word list this item belongs to, so numbering
+        # counts the way Word counts (see _v11_list_info). None when unknown.
+        self.list_info = None
 
     @property
     def text(self):
@@ -937,7 +946,77 @@ def flatten_source_wrappers(root):
                         "{%s}smartTagPr" % W, "{%s}customXmlPr" % W)]
                     _unwrap(el, keep)
                 changed = True
+    # v1.1 (2026-10-28): hidden text and drop caps, read the way Word shows them.
+    v11_clean_source(root)
     return root
+
+
+_V11_W = "http://schemas.openxmlformats.org/wordprocessingml/2006/main"
+
+
+_V11_TEXT_ONLY = {"rPr", "t", "tab", "br", "cr", "sym", "noBreakHyphen",
+                  "softHyphen", "ptab", "lastRenderedPageBreak"}
+
+
+_V11_LAST_CLEAN = {"hidden_runs": 0, "drop_caps": 0}
+
+
+def _v11_toggle_on(el):
+    if el is None:
+        return False
+    val = el.get("{%s}val" % _V11_W)
+    return val is None or str(val).strip().lower() not in ("0", "false", "off", "none")
+
+
+def v11_clean_source(root):
+    """v1.1 2026-10-28. Take out hidden-text runs and join each drop cap to
+    the paragraph it belongs to. Safe to run more than once on the same tree.
+    Returns (hidden runs taken out, drop caps joined)."""
+    if root is None:
+        return 0, 0
+    W = _V11_W
+    hidden = 0
+    for r in list(root.iter("{%s}r" % W)):
+        rpr = r.find("{%s}rPr" % W)
+        if rpr is None or not _v11_toggle_on(rpr.find("{%s}vanish" % W)):
+            continue
+        if any(c.tag.split("}")[-1] not in _V11_TEXT_ONLY for c in r):
+            continue
+        par = r.getparent()
+        if par is not None:
+            par.remove(r)
+            hidden += 1
+    drops = 0
+    for p in list(root.iter("{%s}p" % W)):
+        ppr = p.find("{%s}pPr" % W)
+        fr = ppr.find("{%s}framePr" % W) if ppr is not None else None
+        if fr is None or str(fr.get("{%s}dropCap" % W) or "none").lower() not in ("drop", "margin"):
+            continue
+        nxt = p.getnext()
+        if nxt is None or nxt.tag != "{%s}p" % W or p.getparent() is None:
+            continue
+        nppr = nxt.find("{%s}pPr" % W)
+        nfr = nppr.find("{%s}framePr" % W) if nppr is not None else None
+        if nfr is not None and nfr.get("{%s}dropCap" % W):
+            continue
+        moving = [c for c in p if c.tag != "{%s}pPr" % W]
+        if not any((t.text or "").strip() for c in moving for t in c.iter("{%s}t" % W)):
+            continue
+        at = 1 if nppr is not None else 0
+        for c in moving:
+            # The big letter's own size and lowering are left behind: in the
+            # book it is the first letter of the first word, in the body font.
+            for crpr in c.iter("{%s}rPr" % W):
+                for k in list(crpr):
+                    if k.tag.split("}")[-1] in ("sz", "szCs", "position", "kern"):
+                        crpr.remove(k)
+            nxt.insert(at, c)
+            at += 1
+        p.getparent().remove(p)
+        drops += 1
+    _V11_LAST_CLEAN["hidden_runs"] += hidden
+    _V11_LAST_CLEAN["drop_caps"] += drops
+    return hidden, drops
 
 
 def _extract_run_into(child, runs, images, with_notes=True):
@@ -951,11 +1030,14 @@ def _extract_run_into(child, runs, images, with_notes=True):
     bold = False
     italic = False
     underline = strike = small_caps = superscript = subscript = False
+    caps = False   # v1.1 2026-10-28: All Caps
+    _first_new = len(runs)
     if rpr is not None:
         bold = _xml_toggle_on(rpr, "w:b")
         italic = _xml_toggle_on(rpr, "w:i")
         strike = _xml_toggle_on(rpr, "w:strike")
         small_caps = _xml_toggle_on(rpr, "w:smallCaps")
+        caps = _xml_toggle_on(rpr, "w:caps")   # v1.1 2026-10-28
         _u = rpr.find(qn("w:u"))
         if _u is not None:
             underline = str(_u.get(qn("w:val")) or "single").strip().lower() != "none"
@@ -1043,6 +1125,10 @@ def _extract_run_into(child, runs, images, with_notes=True):
     if text:
         runs.append(RichRun(text, bold, italic, underline, strike,
                             small_caps, superscript, subscript))
+    # v1.1 2026-10-28: every piece read from this Word run keeps its All Caps.
+    if caps:
+        for _rr in runs[_first_new:]:
+            _rr.caps = True
     for _n in note_markers:
         runs.append(RichRun(str(_n), superscript=True))
 
@@ -1097,6 +1183,10 @@ def _list_kind_from_numbering(para, doc):
     if nid_el is None:
         return "bullet"
     nid = nid_el.get(qn("w:val"))
+    if str(nid).strip() == "0":
+        # v1.1 2026-10-28: numId 0 is how Word writes "numbering switched
+        # off" on this line. v1.0 printed a bullet on it.
+        return None
     try:
         numbering = doc.part.numbering_part.element
     except Exception:
@@ -1114,6 +1204,14 @@ def _list_kind_from_numbering(para, doc):
     if absnum is None:
         return "bullet"
     lvl = absnum.find(qn("w:lvl"))
+    # v1.1 2026-10-28: the look of THIS item's own level, not the first
+    # level's. A numbered list with bullet sub-points printed numbers on the
+    # sub-points in v1.0.
+    _il = numpr.find(qn("w:ilvl"))
+    _want = _il.get(qn("w:val")) if _il is not None else None
+    if _want is not None:
+        lvl = next((l for l in absnum.findall(qn("w:lvl"))
+                    if l.get(qn("w:ilvl")) == _want), lvl)
     fmt = lvl.find(qn("w:numFmt")) if lvl is not None else None
     val = fmt.get(qn("w:val")) if fmt is not None else None
     return "bullet" if val in (None, "bullet", "none") else "number"
@@ -1165,6 +1263,16 @@ def detect_list_kind(para, doc):
     """Return 'bullet'/'number' if the source paragraph is a Word list item, else
     None. Checks the list STYLE name first (List Bullet / List Number), then any
     direct numbering. Plain paragraphs return None so they are never bulletized."""
+    # v1.1 2026-10-28: numbering switched off on the line itself (numId 0)
+    # wins over a list style, as it does in Word.
+    try:
+        _ppr = para._p.find(qn("w:pPr"))
+        _np = _ppr.find(qn("w:numPr")) if _ppr is not None else None
+        _ni = _np.find(qn("w:numId")) if _np is not None else None
+        if _ni is not None and str(_ni.get(qn("w:val"))).strip() == "0":
+            return None
+    except Exception:
+        pass
     try:
         name = (para.style.name or "").lower()
     except Exception:
@@ -1174,6 +1282,66 @@ def detect_list_kind(para, doc):
     if "list bullet" in name:
         return "bullet"
     return _list_kind_from_numbering(para, doc)
+
+
+def _v11_list_info(para, doc, level):
+    """{key, num, fmt, start, override} for a numbered Word list item, or
+    None when the paragraph's list cannot be found in the numbering part (then
+    the v1.0 counting is used, unchanged)."""
+    try:
+        nid = ilvl = None
+        ppr = para._p.find(qn("w:pPr"))
+        numpr = ppr.find(qn("w:numPr")) if ppr is not None else None
+        if numpr is not None:
+            _e = numpr.find(qn("w:numId"))
+            nid = _e.get(qn("w:val")) if _e is not None else None
+            _e = numpr.find(qn("w:ilvl"))
+            ilvl = _e.get(qn("w:val")) if _e is not None else None
+        if nid is None:
+            # A list made with a list style ("List Number") keeps its
+            # numbering in the style, or in a style it is based on.
+            style, hops = para.style, 0
+            while style is not None and hops < 10 and nid is None:
+                _sp = style.element.find(qn("w:pPr"))
+                _sn = _sp.find(qn("w:numPr")) if _sp is not None else None
+                if _sn is not None and _sn.find(qn("w:numId")) is not None:
+                    nid = _sn.find(qn("w:numId")).get(qn("w:val"))
+                    if ilvl is None and _sn.find(qn("w:ilvl")) is not None:
+                        ilvl = _sn.find(qn("w:ilvl")).get(qn("w:val"))
+                style, hops = style.base_style, hops + 1
+        if nid is None or str(nid).strip() == "0":
+            return None
+        numbering = doc.part.numbering_part.element
+        num = next((n for n in numbering.findall(qn("w:num"))
+                    if n.get(qn("w:numId")) == nid), None)
+        if num is None or num.find(qn("w:abstractNumId")) is None:
+            return None
+        absid = num.find(qn("w:abstractNumId")).get(qn("w:val"))
+        absnum = next((a for a in numbering.findall(qn("w:abstractNum"))
+                       if a.get(qn("w:abstractNumId")) == absid), None)
+        if absnum is None:
+            return None
+        want = str(ilvl) if ilvl is not None and str(ilvl).isdigit() else str(level)
+        lvl = next((l for l in absnum.findall(qn("w:lvl"))
+                    if l.get(qn("w:ilvl")) == want), None)
+        fmt, start = "decimal", 1
+        if lvl is not None:
+            _f = lvl.find(qn("w:numFmt"))
+            if _f is not None and _f.get(qn("w:val")):
+                fmt = _f.get(qn("w:val"))
+            _s = lvl.find(qn("w:start"))
+            if _s is not None and str(_s.get(qn("w:val"), "")).isdigit():
+                start = int(_s.get(qn("w:val")))
+        override = {}
+        for _o in num.findall(qn("w:lvlOverride")):
+            _so = _o.find(qn("w:startOverride"))
+            _ol = str(_o.get(qn("w:ilvl"), ""))
+            if _so is not None and _ol.isdigit() and str(_so.get(qn("w:val"), "")).isdigit():
+                override[min(int(_ol), 3)] = int(_so.get(qn("w:val")))
+        return {"key": absid, "num": nid, "fmt": fmt, "start": start,
+                "override": override}
+    except Exception:
+        return None
 
 
 INVISIBLE_CHARACTERS = {
@@ -1270,6 +1438,14 @@ def parse_manuscript(doc, config=None):
     heading level become chapter breaks. Lower heading levels become bold subheads
     within the chapter. Fuzzy signals (numbered, bold, ALL-CAPS) are suppressed
     entirely when any Word heading styles exist."""
+    # v1.1 2026-10-28: hidden text out, drop caps joined, before anything is
+    # read. The safety check's chapter count (kdp_preflight_gate) comes here
+    # without the engine's other preparation, so it is done here too. Running
+    # it twice changes nothing.
+    try:
+        v11_clean_source(doc.element)
+    except Exception:
+        pass
     # Read the author's footnotes and endnotes first, so every reading of a
     # paragraph from here on leaves the raised number where the note was.
     load_notes(doc)
@@ -1534,6 +1710,8 @@ def _parse_manuscript(doc, is_heading, min_level=None):
                               list_level=detect_list_level(para),
                               is_title_style=_is_titlepage,
                               is_caption=_looks_like_caption)
+        if cp.list_kind == "number":   # v1.1 2026-10-28
+            cp.list_info = _v11_list_info(para, doc, cp.list_level)
         if in_table_cell:
             cp.table_pos = table_position(para)
         elif cp.list_kind is None:
