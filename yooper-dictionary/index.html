@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1c4a2b">
+<title>The Yooper Dictionary — 2 Broke Yoopers</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-192.png">
+<style>
+  :root{ --pine:#1c4a2b; --lake:#1c5c96; --cream:#f6efe2; --ink:#1f2a24; --gold:#d8a43a; }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:var(--cream);color:var(--ink)}
+  header{background:var(--pine);color:#fff;padding:18px 16px 22px;text-align:center;position:sticky;top:0;z-index:5;box-shadow:0 2px 10px rgba(0,0,0,.18)}
+  header h1{margin:0;font-size:1.5rem;letter-spacing:.5px}
+  header p{margin:4px 0 0;opacity:.85;font-size:.8rem}
+  .wrap{max-width:720px;margin:0 auto;padding:14px 14px 60px}
+  .search{position:sticky;top:84px;z-index:4;margin:-10px 0 14px}
+  .search input{width:100%;padding:14px 16px;border-radius:14px;border:2px solid #d9cfba;font-size:1.05rem;background:#fff;box-shadow:0 4px 14px rgba(0,0,0,.06)}
+  .search input:focus{outline:none;border-color:var(--lake)}
+  .wotd{background:linear-gradient(135deg,var(--lake),var(--pine));color:#fff;border-radius:16px;padding:16px 18px;margin-bottom:16px}
+  .wotd .lab{font-size:.7rem;text-transform:uppercase;letter-spacing:1.5px;opacity:.85}
+  .wotd .t{font-size:1.5rem;font-weight:700;margin:2px 0 6px}
+  .card{background:#fff;border-radius:14px;padding:14px 16px;margin-bottom:10px;box-shadow:0 2px 8px rgba(0,0,0,.06);border:1px solid #ece3d2}
+  .card .top{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+  .term{font-size:1.2rem;font-weight:700;color:var(--pine)}
+  .pos{font-style:italic;color:#8a7f6b;font-size:.85rem}
+  .speak{margin-left:auto;border:none;background:var(--gold);color:#3a2a00;font-weight:700;border-radius:20px;padding:6px 12px;cursor:pointer;font-size:.85rem}
+  .speak:active{transform:scale(.96)}
+  .def{margin:8px 0 6px;line-height:1.45}
+  .ex{color:#6a6052;font-style:italic;font-size:.92rem}
+  .count{font-size:.78rem;color:#8a7f6b;margin:0 2px 10px}
+  footer{text-align:center;padding:18px;color:#8a7f6b;font-size:.8rem}
+  footer a{color:var(--lake);text-decoration:none}
+  .install{display:none;margin:0 auto 14px;background:var(--gold);color:#3a2a00;border:none;border-radius:20px;padding:10px 16px;font-weight:700;cursor:pointer}
+  .empty{text-align:center;color:#8a7f6b;padding:30px}
+</style>
+</head>
+<body>
+<header>
+  <h1>The Yooper Dictionary</h1>
+  <p>Talk like you're from da U.P., eh — by 2 Broke Yoopers</p>
+</header>
+<div class="wrap">
+  <div class="search"><input id="q" type="search" placeholder="Search Yooper words… (try 'pasty')" autocomplete="off"></div>
+  <button class="install" id="install">⬇ Install this dictionary on your phone</button>
+  <div id="wotd"></div>
+  <div class="count" id="count"></div>
+  <div id="list"></div>
+  <div class="empty" id="empty" style="display:none">No Yooper words match that. Try another, eh.</div>
+</div>
+<footer>Heard a word we missed? <a href="https://2brokeyoopers.com" target="_blank" rel="noopener">2brokeyoopers.com</a><br>Tap 🔊 to hear it said right.</footer>
+<script>
+const ENTRIES = [
+  {term:"Yooper",pos:"n.",def:"A person from Michigan's Upper Peninsula.",ex:"\"She married a Yooper and never left.\""},
+  {term:"Troll",pos:"n.",def:"A person from below the Mackinac Bridge — the Lower Peninsula.",ex:"\"He's a Troll. Don't hold it against him.\""},
+  {term:"da U.P.",pos:"n.",say:"duh you pee",def:"The Upper Peninsula. The \"U.P.\" is two letters, not the word \"up.\"",ex:"\"We're going up to da U.P. for the weekend.\""},
+  {term:"Pasty",pos:"n.",say:"pass tee",def:"A handheld meat-and-potato hand pie brought to the U.P. by Cornish miners. Say \"pass-tee,\" NOT \"paste-ee.\"",ex:"\"You want gravy on your pasty? Don't lie.\""},
+  {term:"Holy Wah",pos:"interj.",say:"holy wah",def:"All-purpose Yooper exclamation of surprise — the local \"wow / oh man.\"",ex:"\"Holy Wah, look at the snow!\""},
+  {term:"eh",pos:"interj.",def:"Tacked onto a sentence to invite agreement or soften it.",ex:"\"Cold one today, eh?\""},
+  {term:"sauna",pos:"n.",say:"sow nuh",def:"Pronounced \"sow-nuh,\" not \"saw-nuh.\" Often a backyard wood-fired structure. Saying it wrong gets you side-eye.",ex:"\"Take a sauna before bed. Helps everything.\""},
+  {term:"youse",pos:"pron.",def:"Plural \"you.\" Used freely.",ex:"\"What are youse doing this weekend?\""},
+  {term:"choppers",pos:"n.",def:"Heavy leather mittens lined with wool. Not gloves. Gloves are for downstaters.",ex:"\"Forgot my choppers. My fingers are done.\""},
+  {term:"swampers",pos:"n.",def:"Rubber-bottom, leather-top boots. Standard winter footwear.",ex:"\"Put your swampers on. It's slop out there.\""},
+  {term:"camp",pos:"n.",def:"A small cabin, usually owned, usually away from people. Not tents.",ex:"\"We're heading up to camp Friday. Bring beer.\""},
+  {term:"side-by-side",pos:"n.",def:"A small utility ATV with two seats in front. Not a four-wheeler.",ex:"\"Hop in the side-by-side. We'll drive to the bait shop.\""},
+  {term:"bait shop",pos:"n.",def:"A small store selling tackle, snacks, beer, and unsolicited fishing advice.",ex:"\"Cliff at the bait shop says they're biting on perch.\""},
+  {term:"two-track",pos:"n.",def:"A narrow dirt road through woods — two tire tracks with grass between them.",ex:"\"Take the second two-track past the bridge.\""},
+  {term:"lake effect",pos:"n.",def:"Snow made when cold air crosses warmer lake water. Source of most of the U.P.'s extreme winter.",ex:"\"Three feet overnight. Lake effect off Superior.\""},
+  {term:"snirt",pos:"n.",def:"Snow and dirt mixed, built up roadside in late winter.",ex:"\"Spring is when the snirt finally melts.\""},
+  {term:"tag",pos:"n.",def:"Hunting license, usually for deer. Buck tag, doe tag, antlerless tag.",ex:"\"Got my tag back in August.\""},
+  {term:"opener",pos:"n.",def:"Opening day of any season — deer, trout, walleye, smelt. Context tells you which.",ex:"\"What time you heading out for the opener?\""},
+  {term:"making wood",pos:"v.",def:"Cutting, splitting, and stacking firewood. A multi-day operation.",ex:"\"He's making wood all weekend if you're looking for him.\""},
+  {term:"down-state",pos:"adj.",def:"Below the Mackinac Bridge. Used dismissively as often as descriptively.",ex:"\"She married a down-state lawyer.\""},
+  {term:"Sault",pos:"n.",say:"soo",def:"Sault Ste. Marie, Michigan. Pronounced \"Soo,\" not \"Salt.\"",ex:"\"Going up to the Sault for groceries.\""},
+  {term:"Trenary toast",pos:"n.",def:"Twice-baked cinnamon bread from Trenary, MI. Eaten dipped in coffee.",ex:"\"Got Trenary toast for breakfast. Saved your day.\""},
+  {term:"cudighi",pos:"n.",say:"koo dee gee",def:"A spiced Italian sausage popular in the central U.P., served on Italian bread with sauce and onion.",ex:"\"Best cudighi in Marquette? Argue about it for years.\""},
+  {term:"thimbleberry",pos:"n.",def:"A tart red roadside berry used for jam. Can't be farmed — hand-picked only.",ex:"\"Thimbleberry jam was twelve bucks a jar last summer.\""},
+  {term:"rock pile",pos:"n.",def:"A retired mining stamp-sand or waste-rock heap. Visible all over the central U.P.",ex:"\"Met him out by the old rock pile.\""},
+  {term:"finlander",pos:"n.",def:"A person of Finnish descent. Many U.P. families are.",ex:"\"Her side is all finlander. They run sauna.\""},
+  {term:"da bridge",pos:"n.",def:"The Mackinac Bridge linking the peninsulas. Five miles long, opened 1957.",ex:"\"Crossed da bridge in a blizzard. Knuckles white.\""},
+  {term:"buck pole",pos:"n.",def:"A pole at camp or a bar where hunters hang and show off their deer.",ex:"\"Biggest rack on the buck pole buys the round.\""},
+  {term:"smelt dipping",pos:"v.",def:"Netting tiny smelt fish from streams at night in spring. A social event.",ex:"\"Smelt are running — grab the nets.\""},
+  {term:"ya, no",pos:"interj.",def:"Yooper agreement that sounds like disagreement. Means \"yes, I agree.\"",ex:"\"Ya, no, that's a good idea.\""}
+];
+
+const listEl=document.getElementById('list'), qEl=document.getElementById('q'),
+      countEl=document.getElementById('count'), emptyEl=document.getElementById('empty'),
+      wotdEl=document.getElementById('wotd');
+
+function speak(text){
+  if(!('speechSynthesis' in window)) return;
+  speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(text);
+  u.rate=.92; u.pitch=1;
+  speechSynthesis.speak(u);
+}
+function card(e){
+  const d=document.createElement('div'); d.className='card';
+  d.innerHTML=`<div class="top"><span class="term"></span><span class="pos"></span>
+    <button class="speak">🔊 Hear it</button></div>
+    <div class="def"></div><div class="ex"></div>`;
+  d.querySelector('.term').textContent=e.term;
+  d.querySelector('.pos').textContent=e.pos;
+  d.querySelector('.def').textContent=e.def;
+  d.querySelector('.ex').textContent=e.ex;
+  d.querySelector('.speak').addEventListener('click',()=>speak(e.say||e.term));
+  return d;
+}
+function render(filter){
+  const f=(filter||'').trim().toLowerCase();
+  const items=ENTRIES.filter(e=>!f||e.term.toLowerCase().includes(f)||e.def.toLowerCase().includes(f));
+  listEl.innerHTML='';
+  items.forEach(e=>listEl.appendChild(card(e)));
+  emptyEl.style.display=items.length?'none':'block';
+  countEl.textContent=items.length+' word'+(items.length===1?'':'s');
+}
+// Word of the day — deterministic by date so it's stable per day, no Math.random
+function wotd(){
+  const now=new Date();
+  const day=Math.floor(now.getTime()/86400000);
+  const e=ENTRIES[day%ENTRIES.length];
+  wotdEl.innerHTML=`<div class="wotd"><div class="lab">Word of the Day</div>
+    <div class="t">${e.term}</div><div>${e.def}</div>
+    <button class="speak" style="margin-top:10px">🔊 Hear it</button></div>`;
+  wotdEl.querySelector('.speak').addEventListener('click',()=>speak(e.say||e.term));
+}
+qEl.addEventListener('input',()=>render(qEl.value));
+wotd(); render('');
+
+// PWA install
+let deferred;
+const installBtn=document.getElementById('install');
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferred=e;installBtn.style.display='block';});
+installBtn.addEventListener('click',async()=>{if(deferred){deferred.prompt();await deferred.userChoice;deferred=null;installBtn.style.display='none';}});
+if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));}
+</script>
+</body>
+</html>
