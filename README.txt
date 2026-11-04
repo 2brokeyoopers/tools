@@ -6,7 +6,7 @@ FINAL_TARGET: https://2brokeyoopers.github.io/tools/cover-calculator/ shows the 
 CHECK_COMMAND: node cover-calculator\tests\check_all.js   (or double-click cover-calculator\CHECK THE COVER CALCULATOR - double click me.bat). Pass is every line FAIL=0.
 SUSPEND_DATE: 2026-12-04
 MAX_IDLE_DAYS: 30
-STATUS: BUILT on branch cover-calculator, waiting for Mike to look at it and merge. Not public until merged.
+STATUS: LIVE since 2026-11-04. Mike approved it by eye, Gemini Pro graded it A with PUBLISH: YES, and it was merged to main.
 
 WHAT IS IN THIS REPO
 - index.html: the start page that links every tool
@@ -65,6 +65,5 @@ DECISIONS MADE WITHOUT ASKING (2026-11-04, nobody was available to answer)
 12. The page remembers the last choices on that one device only. Nothing is sent anywhere.
 
 STILL OPEN
-- Mike looks at the page and the template by eye, then merges the pull request to make it public.
 - What has been left out that should be in? Millimeter input and a hardcover option. Both are easy adds.
 - Is this the best we can do? A PDF template would suit people using Canva or Word. Worth a later look.
