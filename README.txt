@@ -53,8 +53,13 @@ DECISIONS MADE WITHOUT ASKING (2026-11-04, nobody was available to answer)
 9. Slogan. The brief typed it with a short dash. The page uses the long dash, the same as every other
    page on this site and the rulebook's fixed wording, so the line reads the same everywhere.
 10. Payhip link is https://payhip.com/b/16Nra, the same KDP Quick Formatter link the KDP check uses.
-    Payhip blocked our robot from reading the live page, so the $19.99 price comes from the facts file
-    (live 2026-10-29), not a fresh look.
+    The formatter price is $14.99 (Mike, 2026-11-04, after the Payhip price drop). Payhip blocked our
+    robot from reading the live page, so this comes from Mike, not a fresh look.
+13. Price check. tests/test_prices.js fails if the old formatter price shows up anywhere in this repo,
+    and checks that both KDP pages show $14.99. It covers the KDP check page too, because that page
+    offers the same formatter. The refund line in kdp-check/kdp_preflight_gate.py now says "refund
+    what you paid", since buyers before 2026-11-04 paid the old price. The same file in the 2BY repo
+    (kdp-free-check/web) still needs the same change.
 11. The barcode box is 2" x 1.2", 0.25" from the spine fold and from the bottom trim, as in Amazon's
     template.
 12. The page remembers the last choices on that one device only. Nothing is sent anywhere.

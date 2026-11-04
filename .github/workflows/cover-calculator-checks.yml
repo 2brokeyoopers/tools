@@ -1,9 +1,9 @@
 name: Cover calculator checks
 on:
   push:
-    paths: ["cover-calculator/**", "index.html", ".github/workflows/cover-calculator-checks.yml"]
+    paths: ["cover-calculator/**", "kdp-check/**", "index.html", "README.txt", ".github/workflows/cover-calculator-checks.yml"]
   pull_request:
-    paths: ["cover-calculator/**", "index.html", ".github/workflows/cover-calculator-checks.yml"]
+    paths: ["cover-calculator/**", "kdp-check/**", "index.html", "README.txt", ".github/workflows/cover-calculator-checks.yml"]
 jobs:
   check:
     strategy:

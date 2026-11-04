@@ -8,6 +8,8 @@ const runs = [
   ["math against Amazon's answers, with broken copies", "test_cover_math.js", []],
   ["page promises", "test_page.js", []],
   ["page promises selftest", "test_page.js", ["--selftest"]],
+  ["formatter price", "test_prices.js", []],
+  ["formatter price selftest", "test_prices.js", ["--selftest"]],
   ["template picture", "test_template.js", []],
   ["template picture selftest", "test_template.js", ["--selftest"]],
 ];
