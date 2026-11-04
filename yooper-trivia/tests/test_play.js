@@ -76,7 +76,8 @@ async function play(root) {
     ok("the end screen fits the phone with no sideways scrolling", await noSideScroll());
     await page.click("#share");
     const copied = await page.evaluate(() => window.__copied || "");
-    ok("the share button shares the score and the quiz link", copied.includes("I scored " + expected + " out of " + asked.length) && copied.includes("https://2brokeyoopers.github.io/tools/yooper-trivia/"));
+    // Gemini's wording, with the real score of this round (5 right answers out of 10 in this test).
+    ok("the share button shares the real final score and the quiz link", copied === "I scored " + expected + "/" + asked.length + " on Yooper Trivia! Can you beat me? https://2brokeyoopers.github.io/tools/yooper-trivia/");
     ok("the end screen links to the store and the dictionary", (await page.isVisible('#end a[href="https://2brokeyoopers.com"]')) && (await page.isVisible('#end a[href="../yooper-dictionary/"]')));
     await page.click("#again");
     ok("play again starts a fresh round at question 1", (await page.textContent("#count")).startsWith("Question 1 of"));
@@ -107,7 +108,7 @@ async function play(root) {
 }
 
 function brokenCopy() {
-  // A copy of the site with nine questions per round and the questions left out of the offline files.
+  // A copy of the site with nine questions per round, a made-up shared score, and the questions left out of the offline files.
   const tmp = fs.mkdtempSync(path.join(os.tmpdir(), "trivia-broken-"));
   const repo = path.join(__dirname, "..", "..");
   for (const d of ["yooper-trivia", "yooper-dictionary"]) {
@@ -115,7 +116,8 @@ function brokenCopy() {
     for (const f of fs.readdirSync(path.join(repo, d))) { const s = path.join(repo, d, f); if (fs.statSync(s).isFile()) fs.copyFileSync(s, path.join(tmp, d, f)); }
   }
   const page = path.join(tmp, "yooper-trivia", "index.html");
-  fs.writeFileSync(page, fs.readFileSync(page, "utf8").replace("var ROUND = 10;", "var ROUND = 9;"));
+  // Also share a made-up score of 8 instead of the real one.
+  fs.writeFileSync(page, fs.readFileSync(page, "utf8").replace("var ROUND = 10;", "var ROUND = 9;").replace('return "I scored " + score + "/"', 'return "I scored " + 8 + "/"'));
   const sw = path.join(tmp, "yooper-trivia", "sw.js");
   fs.writeFileSync(sw, fs.readFileSync(sw, "utf8").replace("'questions.js', ", "").replace("caches.open(CACHE).then(c => c.put(e.request, copy))", "Promise.resolve()"));
   return tmp;
@@ -125,7 +127,7 @@ function brokenCopy() {
   let pass = 0, fail = 0;
   if (process.argv.includes("--selftest")) {
     const results = new Map(await play(brokenCopy()));
-    for (const name of ["a round asks exactly 10 questions", "the quiz still works with the internet switched off"]) {
+    for (const name of ["a round asks exactly 10 questions", "the share button shares the real final score and the quiz link", "the quiz still works with the internet switched off"]) {
       if (results.get(name) === false) { pass++; console.log("PASS selftest caught: " + name); }
       else { fail++; console.log("FAIL selftest: this check did not catch the broken copy: " + name); }
     }

@@ -6,7 +6,8 @@ FINAL_TARGET: https://2brokeyoopers.github.io/tools/yooper-trivia/ plays a rando
 CHECK_COMMAND: node yooper-trivia\tests\check_all.js   (or double-click yooper-trivia\CHECK YOOPER TRIVIA - double click me.bat). Pass is every line FAIL=0.
 SUSPEND_DATE: 2026-12-04
 MAX_IDLE_DAYS: 30
-STATUS: BUILT 2026-11-04 on branch yooper-trivia, pull request open for Mike. Not merged, not live. Gemini has not graded it yet.
+STATUS: BUILT 2026-11-04 on branch yooper-trivia, pull request open for Mike. Gemini Pro graded it A, PUBLISH: YES (2026-11-04,
+  reported by the supervisor). Not merged, not live. Waiting on Mike to play it.
 
 WHAT IS IN THIS FOLDER
 - index.html: the quiz page. Start, ten questions, score, share button, links to the store and the dictionary.
@@ -49,13 +50,15 @@ DECISIONS MADE WITHOUT ASKING (2026-11-04)
 4. Tone. Wrong answers get a thank-you and the right answer, never a scolding. The Italian Hall question is worded gently.
 5. Offline. The page loads fresh from the internet when it can, so a corrected question reaches people right away, and
    uses the saved copy when there is no internet.
-6. Share. Phones get the normal share menu. Computers copy the score and a link to paste anywhere.
+6. Share. Phones get the normal share menu. Computers copy the score and a link to paste anywhere. The text is Gemini's
+   wording with the real score, for example: I scored 8/10 on Yooper Trivia! Can you beat me? and the quiz link.
+   test_play.js checks the exact text after a real round, and its selftest fails on a made-up score.
 7. Slogan. The long dash is used, the same as every other page on this site.
 
 STILL OPEN
 - What has been left out that should be in? A daily question and a harder "expert" round. Both are easy adds.
 - Is this the best we can do? More sources than Wikipedia (state park and National Park Service pages) would make the
-  facts stronger. Gemini should grade the real page before Mike sees it.
+  facts stronger.
 
 SOURCES (each page read on 2026-11-04; the number is how many questions use it)
 - https://en.wikipedia.org/wiki/Anatomy_of_a_Murder  (1)
