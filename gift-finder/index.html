@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Yooper Gift Finder</title>
+<meta name="description" content="Answer three quick questions and get gift ideas from 2 Broke Yoopers: printables, books, shirts, mugs and stickers for hunters, anglers, cabin lovers, kids, readers and puzzle fans.">
+<meta name="theme-color" content="#2F6B4F">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,400;7..72,600;7..72,800&family=Public+Sans:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ground: #E9EEF5; --paper: #FFFFFF; --ink: #1C2430; --ink-soft: #4A5566;
+  --blue: #2B5DA8; --blue-faint: #C9D7EC; --amber: #8A560C;
+  --pine: #2F6B4F; --pine-faint: #DDEDE4; --line: #D3DCE8;
+  --serif: "Literata", Georgia, serif; --sans: "Public Sans", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --ground: #141A22; --paper: #1D2530; --ink: #E7ECF3; --ink-soft: #A9B4C4;
+    --blue: #7FA8E6; --blue-faint: #2E3D55; --amber: #E3A94A;
+    --pine: #7CC59F; --pine-faint: #1F3A2D; --line: #2E3A49;
+  }
+}
+:root[data-theme="dark"] {
+  --ground: #141A22; --paper: #1D2530; --ink: #E7ECF3; --ink-soft: #A9B4C4;
+  --blue: #7FA8E6; --blue-faint: #2E3D55; --amber: #E3A94A;
+  --pine: #7CC59F; --pine-faint: #1F3A2D; --line: #2E3A49;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--ground); color: var(--ink); font: 400 1.0625rem/1.65 var(--serif); }
+main { max-width: 46rem; margin: 0 auto; padding: 2rem 1rem 3rem; }
+.home { font: 600 .9rem/1.4 var(--sans); margin: 0 0 1.5rem; }
+h1 { font: 800 clamp(2.1rem, 6vw, 3.1rem)/1.08 var(--serif); letter-spacing: -0.015em; margin: 0 0 1rem; max-width: 17ch; }
+.lede { font-size: 1.15rem; color: var(--ink-soft); margin: 0 0 2rem; max-width: 36rem; }
+a { color: var(--blue); }
+h2 { font: 600 1.25rem/1.3 var(--serif); margin: 2.25rem 0 .75rem; }
+
+form.sheet { background: var(--paper); padding: 1.5rem 1.25rem; border-top: 4px solid var(--blue); display: grid; gap: 1.5rem; }
+fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
+legend { font: 600 1.05rem/1.4 var(--sans); color: var(--ink); padding: 0; margin: 0 0 .25rem; }
+.hint { font: 400 .9rem/1.45 var(--sans); color: var(--ink-soft); margin: 0 0 .6rem; }
+.choices { display: grid; grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr)); gap: .5rem; }
+.choices label { display: flex; gap: .6rem; align-items: center; min-height: 3rem; background: var(--ground); border: 1.5px solid var(--line); border-radius: 4px; padding: .55rem .75rem; cursor: pointer; font: 400 1rem/1.35 var(--sans); }
+.choices label:has(input:checked) { border-color: var(--blue); background: var(--blue-faint); }
+.choices input { width: 1.15rem; height: 1.15rem; margin: 0; accent-color: var(--blue); flex: none; }
+.choices label:focus-within { outline: 3px solid var(--blue); outline-offset: 2px; }
+button.go { font: 600 1.05rem/1.2 var(--sans); color: #fff; background: var(--pine); border: 0; border-radius: 4px; padding: .95rem 1.4rem; min-height: 3rem; cursor: pointer; justify-self: start; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) button.go { color: #10221A; } }
+button.go:focus-visible { outline: 3px solid var(--blue); outline-offset: 3px; }
+.nudge { font: 400 .95rem/1.5 var(--sans); border-left: 4px solid var(--amber); padding: .2rem 0 .2rem 1rem; margin: 0; }
+.nudge:empty { display: none; }
+
+#result { margin-top: 2rem; }
+.proof { background: var(--paper); padding: 1.5rem 1.25rem; border-top: 4px solid var(--pine); }
+.kicker { font: 600 .85rem/1.3 var(--sans); text-transform: uppercase; letter-spacing: .06em; color: var(--pine); margin: 0 0 .25rem; }
+.big { font: 800 clamp(1.5rem, 5vw, 2.1rem)/1.15 var(--serif); margin: 0 0 .5rem; }
+.printables { background: var(--pine-faint); border-left: 4px solid var(--pine); padding: .75rem 1rem; margin: 0 0 1.25rem; font: 400 .98rem/1.5 var(--sans); }
+ol.gifts { list-style: none; margin: 0; padding: 0; display: grid; gap: 1rem; }
+ol.gifts li { border: 1.5px solid var(--line); border-radius: 4px; padding: 1rem; }
+.tag { display: inline-block; font: 600 .75rem/1 var(--sans); text-transform: uppercase; letter-spacing: .06em; color: var(--pine); background: var(--pine-faint); padding: .3rem .45rem; border-radius: 3px; margin: 0 .4rem .4rem 0; }
+.tag.near { color: var(--amber); background: transparent; border: 1px solid var(--amber); }
+.gname { font: 600 1.12rem/1.3 var(--serif); margin: .1rem 0 .3rem; }
+.gprice { font: 600 .95rem/1.4 var(--sans); margin: 0 0 .35rem; }
+.gblurb { font: 400 .98rem/1.55 var(--sans); color: var(--ink-soft); margin: 0 0 .6rem; }
+a.shop { display: inline-block; font: 600 1rem/1.2 var(--sans); padding: .75rem 1rem; min-height: 2.75rem; border: 1.5px solid var(--blue); border-radius: 4px; text-decoration: none; }
+a.shop:focus-visible { outline: 3px solid var(--blue); outline-offset: 2px; }
+.again { font: 400 .95rem/1.5 var(--sans); margin: 1.25rem 0 0; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+.small { font: 400 .9rem/1.5 var(--sans); color: var(--ink-soft); }
+footer { margin-top: 2.5rem; font: 400 .92rem/1.5 var(--sans); color: var(--ink-soft); }
+footer p { margin: 0 0 .75rem; }
+@media (max-width: 30rem) { .choices { grid-template-columns: 1fr; } button.go, a.shop { width: 100%; text-align: center; } }
+</style>
+</head>
+<body>
+<main>
+<p class="home"><a href="../">Free tools</a> · <a href="https://2brokeyoopers.com">2brokeyoopers.com</a></p>
+<h1>The Yooper Gift Finder</h1>
+<p class="lede">Stuck on a gift? Please answer three quick questions and we will point you to something from 2 Broke Yoopers they might just love. No sign-up, and your answers stay on your phone.</p>
+
+<form class="sheet" id="finder" novalidate>
+  <fieldset>
+    <legend>1. Who is the lucky one?</legend>
+    <div class="choices" id="who"></div>
+  </fieldset>
+  <fieldset>
+    <legend>2. What's the budget?</legend>
+    <p class="hint">Prices are what the stores showed on November 4, 2026. They do change, and sales happen.</p>
+    <div class="choices" id="budget"></div>
+  </fieldset>
+  <fieldset>
+    <legend>3. What do they like?</legend>
+    <p class="hint">Pick as many as you like.</p>
+    <div class="choices" id="likes"></div>
+  </fieldset>
+  <p class="nudge" id="nudge" role="status" aria-live="polite"></p>
+  <button class="go" type="submit">Show me the gifts</button>
+</form>
+
+<section id="result"></section>
+
+<h2>How this works</h2>
+<p class="small">We match your answers against our own shirts, mugs, books and printables. Each button opens that one product's own page on the store that sells it, or the right spot on 2brokeyoopers.com. Your answers are never sent anywhere. Once this page has loaded, it works without the internet too, so it is fine at camp. The store pages still need a signal, of course.</p>
+
+<footer>
+<p>Thank you for shopping small and shopping Yooper. More shirts, books and printables at <a href="https://2brokeyoopers.com">2brokeyoopers.com</a>.</p>
+<p>From 2 Broke Yoopers — affordable products built for fun, function, and honest value.</p>
+</footer>
+</main>
+
+<script src="gifts.js"></script>
+<script>
+(function () {
+  "use strict";
+  var G = window.GiftFinder;
+  var form = document.getElementById("finder");
+  var result = document.getElementById("result");
+  var nudge = document.getElementById("nudge");
+
+  function esc(s) { return String(s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
+
+  function fill(boxId, name, type, map, order) {
+    var box = document.getElementById(boxId);
+    order.forEach(function (key) {
+      var label = document.createElement("label");
+      label.innerHTML = '<input type="' + type + '" name="' + name + '" value="' + esc(key) + '"> <span>' + esc(map[key]) + "</span>";
+      box.appendChild(label);
+    });
+  }
+  fill("who", "who", "radio", G.WHO, Object.keys(G.WHO));
+  // Budgets small to large, then no limit. Spelled out, because JavaScript puts number keys in its own order.
+  fill("budget", "budget", "radio", G.BUDGETS, ["10", "25", "50", "0"]);
+  fill("likes", "likes", "checkbox", G.LIKES, Object.keys(G.LIKES));
+
+  function card(g, near) {
+    return '<li><span class="tag">' + esc(g.kind) + "</span>" + (near ? '<span class="tag near">Close pick</span>' : "") +
+      '<p class="gname">' + esc(g.name) + "</p>" +
+      '<p class="gprice">' + esc(g.priceText) + "</p>" +
+      '<p class="gblurb">' + esc(g.blurb) + "</p>" +
+      '<a class="shop" href="' + esc(g.url) + '" target="_blank" rel="noopener">See it on ' + esc(g.store) + '<span class="sr-only"> (opens in a new tab)</span></a></li>';
+  }
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    var who = form.querySelector('input[name="who"]:checked');
+    var budget = form.querySelector('input[name="budget"]:checked');
+    var likes = [].map.call(form.querySelectorAll('input[name="likes"]:checked'), function (i) { return i.value; });
+    var missing = [];
+    if (!who) missing.push("who it's for");
+    if (!budget) missing.push("a budget");
+    if (!likes.length) missing.push("at least one thing they like");
+    if (missing.length) { nudge.textContent = "Sorry, please pick " + (missing.length > 1 ? missing.slice(0, -1).join(", ") + " and " + missing[missing.length - 1] : missing[0]) + ". Thank you!"; result.innerHTML = ""; return; }
+    nudge.textContent = "";
+
+    var found = G.findGifts({ who: who.value, budget: Number(budget.value), likes: likes });
+    var count = found.picks.length;
+    var html = '<div class="proof"><p class="kicker">Your gift ideas</p>' +
+      '<p class="big" tabindex="-1">' + (count ? (count === 1 ? "We found one good match." : "We found " + count + " good matches.") : "Nothing fits every answer, but these come close.") + "</p>" +
+      '<p class="printables" id="printables-note"><strong>Psst, we have printables too!</strong> Our calendars, almanacs and journals are instant downloads you can print at home tonight, so even a last-minute gift shows up on time.</p>' +
+      '<ol class="gifts">' + found.picks.map(function (g) { return card(g, false); }).join("") +
+      found.nearby.map(function (g) { return card(g, true); }).join("") + "</ol>" +
+      (found.nearby.length ? '<p class="small">Close picks miss at least one of your answers, the budget or what they like. We thought you would want to see them anyway.</p>' : "") +
+      '<p class="again">Thank you for looking! Want different ideas? Please change an answer above and tap the button again.</p></div>';
+    result.innerHTML = html;
+    var still = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    result.scrollIntoView({ behavior: still ? "auto" : "smooth", block: "start" });
+    result.querySelector(".big").focus({ preventScroll: true });
+  });
+
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", function () { navigator.serviceWorker.register("sw.js").catch(function () {}); });
+  }
+})();
+</script>
+</body>
+</html>
