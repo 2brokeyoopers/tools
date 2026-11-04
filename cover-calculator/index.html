@@ -1,0 +1,428 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KDP Cover Size Calculator</title>
+<meta name="description" content="Free KDP paperback cover size calculator. Pick your trim size, page count and paper, and get the full cover size in inches and pixels, the spine width, the safe zones and a template to download. From 2 Broke Yoopers.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,400;7..72,600;7..72,800&family=Public+Sans:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ground: #E9EEF5;
+  --paper: #FFFFFF;
+  --ink: #1C2430;
+  --ink-soft: #4A5566;
+  --blue: #2B5DA8;
+  --blue-faint: #C9D7EC;
+  --red: #C8312B;
+  --amber: #A86B12;
+  --pine: #2F6B4F;
+  --pine-faint: #DDEDE4;
+  --line: #D3DCE8;
+  --serif: "Literata", Georgia, serif;
+  --sans: "Public Sans", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --ground: #141A22; --paper: #1D2530; --ink: #E7ECF3; --ink-soft: #A9B4C4;
+    --blue: #7FA8E6; --blue-faint: #2E3D55; --red: #F07A72; --amber: #E3A94A;
+    --pine: #7CC59F; --pine-faint: #1F3A2D; --line: #2E3A49;
+  }
+}
+:root[data-theme="dark"] {
+  --ground: #141A22; --paper: #1D2530; --ink: #E7ECF3; --ink-soft: #A9B4C4;
+  --blue: #7FA8E6; --blue-faint: #2E3D55; --red: #F07A72; --amber: #E3A94A;
+  --pine: #7CC59F; --pine-faint: #1F3A2D; --line: #2E3A49;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; background: var(--ground); color: var(--ink);
+  font: 400 1.0625rem/1.65 var(--serif);
+}
+main { max-width: 46rem; margin: 0 auto; padding: 2rem 1rem 3rem; }
+.home { font: 600 .9rem/1.4 var(--sans); margin: 0 0 1.5rem; }
+h1 {
+  font: 800 clamp(2.1rem, 6vw, 3.1rem)/1.08 var(--serif);
+  letter-spacing: -0.015em; margin: 0 0 1rem; max-width: 17ch;
+}
+.lede { font-size: 1.15rem; color: var(--ink-soft); margin: 0 0 2rem; max-width: 36rem; }
+a { color: var(--blue); }
+h2 { font: 600 1.25rem/1.3 var(--serif); margin: 2.25rem 0 .75rem; }
+
+/* The form sits on a white sheet, like the page in the KDP check. */
+form.sheet { background: var(--paper); padding: 1.5rem 1.25rem; border-top: 4px solid var(--blue); display: grid; gap: 1.25rem; grid-template-columns: 1fr 1fr; }
+.field { display: flex; flex-direction: column; gap: .35rem; font: 400 .95rem/1.45 var(--sans); }
+.field.wide { grid-column: 1 / -1; }
+.field > label, .field legend { font-weight: 600; color: var(--ink); }
+.field small { color: var(--ink-soft); }
+fieldset.field { border: 0; margin: 0; padding: 0; min-width: 0; }
+select, input[type=number] {
+  font: 400 1rem/1.3 var(--sans); color: var(--ink); background: var(--ground);
+  border: 1.5px solid var(--line); border-radius: 4px; padding: .7rem .75rem; width: 100%;
+}
+select:focus-visible, input:focus-visible { outline: 3px solid var(--blue); outline-offset: 2px; }
+.papers { display: grid; grid-template-columns: 1fr 1fr; gap: .5rem; }
+.papers label { display: flex; gap: .5rem; align-items: flex-start; background: var(--ground); border: 1.5px solid var(--line); border-radius: 4px; padding: .6rem .7rem; cursor: pointer; font-weight: 400; }
+.papers label:has(input:checked) { border-color: var(--blue); background: var(--blue-faint); }
+.papers input { margin-top: .25rem; accent-color: var(--blue); }
+.custom { display: none; gap: .75rem; grid-template-columns: 1fr 1fr; }
+.custom.shown { display: grid; }
+
+/* The answer reads like a marked-up proof. */
+#result { margin-top: 2rem; }
+.proof { background: var(--paper); padding: 1.75rem 1.25rem; border-top: 4px solid var(--pine); }
+.big { font: 800 clamp(1.7rem, 5.5vw, 2.4rem)/1.15 var(--serif); margin: .1rem 0 .35rem; color: var(--ink); }
+.kicker { font: 600 .85rem/1.3 var(--sans); text-transform: uppercase; letter-spacing: .06em; color: var(--pine); margin: 0; }
+.sub { font: 400 .95rem/1.5 var(--sans); color: var(--ink-soft); margin: 0 0 1.25rem; }
+.warn { border-left: 4px solid var(--amber); padding: .2rem 0 .2rem 1rem; margin: 0 0 1.25rem; font: 400 .95rem/1.5 var(--sans); }
+.warn.stop { border-left-color: var(--red); }
+table.parts { width: 100%; border-collapse: collapse; font: 400 .95rem/1.4 var(--sans); margin: 0 0 1.25rem; }
+table.parts th, table.parts td { text-align: left; padding: .55rem .4rem; border-bottom: 1px solid var(--line); vertical-align: top; }
+table.parts th { font-weight: 600; color: var(--ink-soft); font-size: .82rem; text-transform: uppercase; letter-spacing: .04em; }
+table.parts td.num { text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
+table.parts td small { display: block; color: var(--ink-soft); }
+.spine-answer { display: flex; gap: .75rem; align-items: flex-start; padding: 1rem; margin: 0 0 1.25rem; font: 400 .98rem/1.5 var(--sans); }
+.spine-answer.yes { background: var(--pine-faint); }
+.spine-answer.no { background: var(--blue-faint); }
+.spine-answer strong { display: block; font: 600 1.05rem/1.35 var(--serif); }
+.spine-answer .dot { flex: none; width: 1.6rem; height: 1.6rem; border-radius: 50%; display: grid; place-items: center; font: 800 .95rem/1 var(--sans); color: var(--paper); background: var(--pine); }
+.spine-answer.no .dot { background: var(--blue); }
+ul.plain { margin: 0 0 1rem; padding-left: 1.2rem; font: 400 .95rem/1.55 var(--sans); }
+ul.plain li { margin-bottom: .4rem; }
+
+.preview-wrap { margin: 1.25rem 0 0; }
+canvas#preview { width: 100%; height: auto; display: block; background: #fff; border: 1px solid var(--line); }
+.key { font: 400 .85rem/1.5 var(--sans); color: var(--ink-soft); margin: .6rem 0 1rem; }
+.btn {
+  display: inline-block; background: var(--pine); color: #FFFFFF; text-decoration: none; border: 0; cursor: pointer;
+  font: 600 1rem/1 var(--sans); padding: .95rem 1.4rem; border-radius: 4px;
+}
+:root[data-theme="dark"] .btn { color: #10161D; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .btn { color: #10161D; } }
+.btn:focus-visible { outline: 3px solid var(--blue); outline-offset: 3px; }
+.btn[disabled] { opacity: .6; cursor: wait; }
+#dlstatus { font: 400 .9rem/1.4 var(--sans); color: var(--ink-soft); margin: .6rem 0 0; min-height: 1.4em; }
+
+.how { font: 400 .95rem/1.6 var(--sans); }
+.how code { font: 600 .9rem/1.4 ui-monospace, Consolas, monospace; background: var(--paper); padding: .1rem .35rem; border-radius: 3px; }
+.how ol { padding-left: 1.3rem; }
+.how li { margin-bottom: .5rem; }
+
+.offer { margin-top: 2.25rem; background: var(--pine-faint); padding: 1.5rem 1.25rem; }
+.offer h2 { margin-top: 0; color: var(--pine); }
+.offer p { margin: 0 0 1rem; }
+
+footer { max-width: 46rem; margin: 0 auto; padding: 0 1rem 3rem; font: 400 .85rem/1.55 var(--sans); color: var(--ink-soft); }
+footer p { margin: 0 0 .6rem; }
+@media (max-width: 34rem) {
+  form.sheet { grid-template-columns: 1fr; padding: 1.25rem 1rem; }
+  .papers { grid-template-columns: 1fr; }
+  .proof { padding: 1.5rem 1rem; }
+  table.parts td, table.parts th { padding: .5rem .2rem; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+<main>
+  <p class="home"><a href="../">All our free tools</a></p>
+  <h1>How big should your book cover be?</h1>
+  <p class="lede">Tell us about your paperback and we will work out the exact cover size Amazon KDP needs, in inches and in pixels. You can also download a plain template to design on. It is free, and nothing you type leaves your computer.</p>
+
+  <form class="sheet" id="form" onsubmit="return false">
+    <div class="field">
+      <label for="trim">Trim size (the size of the finished book)</label>
+      <select id="trim"></select>
+      <small>Width first, then height, in inches.</small>
+    </div>
+    <div class="field">
+      <label for="pages">Page count</label>
+      <input type="number" id="pages" min="1" max="900" step="1" value="200" inputmode="numeric">
+      <small>The number of pages in your finished interior file.</small>
+    </div>
+    <div class="custom field wide" id="customBox">
+      <div class="field"><label for="cw">Custom width (inches)</label><input type="number" id="cw" min="4" max="8.5" step="0.01" value="6"></div>
+      <div class="field"><label for="ch">Custom height (inches)</label><input type="number" id="ch" min="6" max="11.69" step="0.01" value="9"></div>
+    </div>
+    <fieldset class="field wide">
+      <legend>Paper and ink</legend>
+      <div class="papers" id="papers">
+        <label><input type="radio" name="paper" value="white" checked><span>White paper<br><small>Black ink</small></span></label>
+        <label><input type="radio" name="paper" value="cream"><span>Cream paper<br><small>Black ink, a little thicker</small></span></label>
+        <label><input type="radio" name="paper" value="standard"><span>Standard color<br><small>Color ink on white paper</small></span></label>
+        <label><input type="radio" name="paper" value="premium"><span>Premium color<br><small>Brighter color ink on white paper</small></span></label>
+      </div>
+    </fieldset>
+    <div class="field wide">
+      <label for="bleed">Bleed (extra edge that gets trimmed off)</label>
+      <select id="bleed">
+        <option value="yes" selected>Add bleed, 0.125 inch on each outside edge (KDP needs this for upload)</option>
+        <option value="no">No bleed, show only the trimmed size</option>
+      </select>
+      <small>Every KDP paperback cover is printed with bleed, so keep it on for the file you upload.</small>
+    </div>
+  </form>
+
+  <section id="result" aria-live="polite"></section>
+
+  <section class="how" id="how">
+    <h2>How we worked it out</h2>
+    <p>We used the exact rules from Amazon's own KDP help pages. Here they are, so you can check us.</p>
+    <ol>
+      <li><strong>Spine width</strong> is your page count times a number for your paper: white paper <code>x 0.002252"</code>, cream paper <code>x 0.0025"</code>, standard color <code>x 0.002252"</code>, premium color <code>x 0.002347"</code>. Source: <a href="https://kdp.amazon.com/en_US/help/topic/G201953020" target="_blank" rel="noopener">Create a Paperback Cover</a>, KDP help.</li>
+      <li><strong>Full cover width</strong> = bleed + back cover width + spine width + front cover width + bleed. <strong>Full cover height</strong> = bleed + trim height + bleed. Source: <a href="https://kdp.amazon.com/en_US/help/topic/G201953020" target="_blank" rel="noopener">Create a Paperback Cover</a>.</li>
+      <li><strong>Bleed</strong> is 0.125" (3.2 mm) on the top, bottom and outside edges. Source: <a href="https://kdp.amazon.com/en_US/help/topic/G201953020" target="_blank" rel="noopener">Create a Paperback Cover</a>.</li>
+      <li><strong>Spine text</strong>: "We only print spine text on books with more than 79 pages," with at least 0.0625" (1.6 mm) between the text and each spine edge. Source: <a href="https://kdp.amazon.com/en_US/help/topic/G201953020" target="_blank" rel="noopener">Create a Paperback Cover</a>.</li>
+      <li><strong>Safe zone</strong>: keep text at least 0.125" (3.2 mm) inside the trim lines, and keep front and back text off the spine. Borders need at least 0.25" (6.4 mm) inside the trim line. Source: <a href="https://kdp.amazon.com/en_US/help/topic/G201953020" target="_blank" rel="noopener">Create a Paperback Cover</a>.</li>
+      <li><strong>Barcode</strong>: the suggested size is 2" x 1.2" (50.8 x 30.5 mm). Amazon's calculator keeps it 0.25" from the edges. Source: <a href="https://kdp.amazon.com/en_US/help/topic/G5HDYGP4BXLX4RUW" target="_blank" rel="noopener">Barcodes</a> and the <a href="https://kdp.amazon.com/cover-calculator" target="_blank" rel="noopener">KDP Cover Calculator</a>.</li>
+      <li><strong>Pixels</strong>: covers need at least 300 DPI, so pixels are inches times 300, rounded up to a whole pixel. Source: <a href="https://kdp.amazon.com/en_US/help/topic/G201953020" target="_blank" rel="noopener">Create a Paperback Cover</a>.</li>
+      <li><strong>Trim sizes and page limits</strong> come from the table on <a href="https://kdp.amazon.com/en_US/help/topic/G201857950" target="_blank" rel="noopener">Paperback Submission Guidelines</a>. Custom sizes (4" to 8.5" wide, 6" to 11.69" tall) come from <a href="https://kdp.amazon.com/en_US/help/topic/G201834180" target="_blank" rel="noopener">Print Options</a>.</li>
+    </ol>
+    <p>We tested this page against 19 answers from Amazon's own <a href="https://kdp.amazon.com/cover-calculator" target="_blank" rel="noopener">KDP Cover Calculator</a>, covering every standard trim size and all four papers, on November 4, 2026. Every one matched to within a thousandth of an inch. Amazon's previewer still has the final word, so please look at your cover there before you publish.</p>
+  </section>
+
+  <section class="offer">
+    <h2>Need the inside of your book done too?</h2>
+    <p>Our KDP Quick Formatter turns your Word manuscript into a print-ready file for Amazon. It builds the title page, copyright page, contents, page numbers and chapter starts for you, for $14.99.</p>
+    <a class="btn" href="https://payhip.com/b/16Nra" target="_blank" rel="noopener">Get KDP Quick Formatter</a>
+  </section>
+</main>
+<footer>
+  <p>This calculator is a free helper and is not made by Amazon. Thank you for using it! If a number looks wrong, please email <a href="mailto:2brokeyoopers@gmail.com">2brokeyoopers@gmail.com</a> and we will fix it.</p>
+  <p>More shirts, books and printables at <a href="https://2brokeyoopers.com">2brokeyoopers.com</a>.</p>
+  <p>From 2 Broke Yoopers — affordable products built for fun, function, and honest value.</p>
+</footer>
+
+<script src="cover-math.js"></script>
+<script>
+(function () {
+  "use strict";
+  const M = window.CoverMath;
+  const $ = (id) => document.getElementById(id);
+  const trimSel = $("trim"), pagesIn = $("pages"), bleedSel = $("bleed"), cw = $("cw"), ch = $("ch"), customBox = $("customBox"), out = $("result");
+  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const f3 = (n) => (Math.round(n * 1000) / 1000).toString();
+  const mm = (n) => (n * 25.4).toFixed(1);
+
+  // Fill the trim size list.
+  const groups = [["us", "Most used sizes (Amazon.com)"], ["jp", "Sizes for Amazon Japan"]];
+  groups.forEach(([g, label]) => {
+    const og = document.createElement("optgroup"); og.label = label;
+    M.TRIMS.filter((t) => t.group === g).forEach((t) => {
+      const o = document.createElement("option"); o.value = t.id; o.textContent = t.w + '" x ' + t.h + '"';
+      if (t.id === "6 x 9") o.selected = true;
+      og.appendChild(o);
+    });
+    trimSel.appendChild(og);
+  });
+  const oc = document.createElement("option"); oc.value = "custom"; oc.textContent = "A custom size"; trimSel.appendChild(oc);
+
+  // Remember the last choices on this device only, when the browser allows it.
+  const KEY = "2by-cover-calc";
+  try {
+    const saved = JSON.parse(localStorage.getItem(KEY) || "null");
+    if (saved) {
+      if ([...trimSel.options].some((o) => o.value === saved.trim)) trimSel.value = saved.trim;
+      if (saved.pages) pagesIn.value = saved.pages;
+      if (saved.cw) cw.value = saved.cw; if (saved.ch) ch.value = saved.ch;
+      if (saved.bleed) bleedSel.value = saved.bleed;
+      const r = document.querySelector('input[name=paper][value="' + saved.paper + '"]'); if (r) r.checked = true;
+    }
+  } catch (e) { /* storage blocked, start fresh */ }
+
+  let current = null;
+
+  function read() {
+    const paper = document.querySelector("input[name=paper]:checked").value;
+    const custom = trimSel.value === "custom";
+    customBox.classList.toggle("shown", custom);
+    return { trim: custom ? { w: cw.value, h: ch.value } : trimSel.value, paper, pages: pagesIn.value, bleed: bleedSel.value === "yes",
+             saved: { trim: trimSel.value, paper, pages: pagesIn.value, cw: cw.value, ch: ch.value, bleed: bleedSel.value } };
+  }
+
+  function render() {
+    const inp = read();
+    try { localStorage.setItem(KEY, JSON.stringify(inp.saved)); } catch (e) { /* fine */ }
+    const pages = Math.floor(Number(inp.pages));
+    if (!(pages >= 1)) { out.innerHTML = '<div class="proof"><p class="warn">Please type your page count, as a whole number.</p></div>'; current = null; return; }
+    if (typeof inp.trim === "object" && !(Number(inp.trim.w) > 0 && Number(inp.trim.h) > 0)) { out.innerHTML = '<div class="proof"><p class="warn">Please type the width and height of your custom size.</p></div>'; current = null; return; }
+    const r = M.coverSize(inp);
+    current = r;
+    let h = '<div class="proof">';
+    h += '<p class="kicker">Your full cover file</p>';
+    h += '<p class="big">' + f3(r.fullWidth) + '" wide x ' + f3(r.fullHeight) + '" tall</p>';
+    h += '<p class="sub">That is <strong>' + r.pixelWidth.toLocaleString() + ' x ' + r.pixelHeight.toLocaleString() + ' pixels</strong> at 300 DPI, or ' + mm(r.fullWidth) + ' x ' + mm(r.fullHeight) + ' mm. ';
+    h += r.bleed ? 'It includes the 0.125" bleed.' : 'This is <strong>without bleed</strong>, so it is not the size to upload.';
+    h += '</p>';
+    r.problems.forEach((p) => { h += '<p class="warn stop">' + esc(p) + ' Please check your choices before you design the cover.</p>'; });
+    if (r.evenPagesNote) h += '<p class="warn">KDP counts pages in even numbers, so an odd page count gets one blank page added. You may want to type ' + (r.pages + 1) + ' instead.</p>';
+
+    h += '<table class="parts"><thead><tr><th>Part</th><th style="text-align:right">Size</th></tr></thead><tbody>';
+    h += '<tr><td>Spine width<small>' + r.pages + ' pages, ' + esc(r.paperRule) + '</small></td><td class="num">' + f3(r.spineWidth) + '"<small>' + Math.round(r.spineWidth * 300) + ' px</small></td></tr>';
+    h += '<tr><td>Front cover and back cover<small>Each one is the trim size</small></td><td class="num">' + f3(r.trimWidth) + '" x ' + f3(r.trimHeight) + '"</td></tr>';
+    h += '<tr><td>Bleed<small>On the top, bottom and both outside edges</small></td><td class="num">' + f3(r.bleed) + '"</td></tr>';
+    h += '<tr><td>Safe zone on the front and on the back<small>Keep words and faces 0.125" inside every trim line and the spine fold</small></td><td class="num">' + f3(r.safeWidth) + '" x ' + f3(r.safeHeight) + '"</td></tr>';
+    h += '<tr><td>Safe zone on the spine<small>0.0625" in from each spine fold</small></td><td class="num">' + (r.spineSafeWidth > 0 ? f3(r.spineSafeWidth) + '" x ' + f3(r.spineSafeHeight) + '"' : 'None') + '</td></tr>';
+    h += '<tr><td>Barcode box<small>Lower right of the back cover, 0.25" from the bottom and the spine</small></td><td class="num">' + f3(r.barcodeWidth) + '" x ' + f3(r.barcodeHeight) + '"</td></tr>';
+    h += '</tbody></table>';
+
+    if (r.spineTextAllowed) {
+      const pts = Math.floor(r.spineSafeWidth * 72 * 10) / 10;
+      h += '<div class="spine-answer yes"><span class="dot" aria-hidden="true">&#10003;</span><div><strong>Yes, you can put words on the spine.</strong>Your book has ' + r.pages + ' pages, and KDP prints spine text on books with more than 79 pages. Keep the words inside the ' + f3(r.spineSafeWidth) + '" safe strip, which fits letters up to about ' + pts + ' points tall.' + (pts < 7 ? ' Amazon asks for text of at least 7 points, so that is a tight fit. Please keep spine words short and bold, or leave the spine plain.' : '') + '</div></div>';
+    } else {
+      h += '<div class="spine-answer no"><span class="dot" aria-hidden="true">i</span><div><strong>No words on the spine for this book.</strong>KDP only prints spine text on books with more than 79 pages, and yours has ' + r.pages + '. A plain color or picture on the spine is fine. Add pages to reach 80 if you want spine text.</div></div>';
+    }
+
+    h += '<h2>Your template</h2><p class="sub" style="margin-bottom:.5rem">A plain picture with guide lines, the exact size of your cover at 300 DPI. Put it on its own layer in your design program, design on top, then hide or delete it before you upload.</p>';
+    h += '<div class="preview-wrap"><canvas id="preview" role="img" aria-label="Preview of the cover template with back cover, spine and front cover"></canvas></div>';
+    h += '<p class="key">Pink edge: bleed, which gets cut off. Solid black line: where the book is trimmed. Blue dashes: spine folds. Green dashes: the safe zone for words. Yellow box: barcode.</p>';
+    h += '<button class="btn" type="button" id="dl">Download the template (PNG)</button><p id="dlstatus" role="status"></p>';
+    h += '</div>';
+    out.innerHTML = h;
+    $("dl").addEventListener("click", download);
+    drawPreview(r);
+  }
+
+  // Draw the template. Units are inches; ctx is already scaled so 1 unit = 1 inch.
+  function drawScene(ctx, r, pxPerInch) {
+    const u = r.micro, k = 1 / 1e6;
+    const B = u.B * k, W = u.W * k, H = u.H * k, S = u.spine * k, FW = r.fullWidth, FH = r.fullHeight;
+    const t = u.text * k, sm = u.spineMargin * k, px = 1 / pxPerInch;
+    const backX = B, spineX = B + W, frontX = B + W + S;
+    ctx.fillStyle = "#FFFFFF"; ctx.fillRect(0, 0, FW, FH);
+    // Bleed band
+    if (B > 0) {
+      ctx.fillStyle = "#F6B9B4";
+      ctx.fillRect(0, 0, FW, B); ctx.fillRect(0, FH - B, FW, B); ctx.fillRect(0, 0, B, FH); ctx.fillRect(FW - B, 0, B, FH);
+    }
+    // Spine
+    ctx.fillStyle = "#EEF2F8"; ctx.fillRect(spineX, B, S, H);
+    // Trim line
+    ctx.strokeStyle = "#000000"; ctx.lineWidth = Math.max(2 * px, 0.006); ctx.setLineDash([]);
+    ctx.strokeRect(B, B, FW - 2 * B, H);
+    // Spine folds
+    // Dashes stay readable in the small preview too.
+    const d = (n) => Math.max(n, n * 100 * px);
+    ctx.strokeStyle = "#2B5DA8"; ctx.lineWidth = Math.max(2 * px, 0.006); ctx.setLineDash([d(0.06), d(0.04)]);
+    [spineX, frontX].forEach((x) => { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, FH); ctx.stroke(); });
+    // Safe zones on back and front
+    ctx.strokeStyle = "#2F8A5F"; ctx.lineWidth = Math.max(2 * px, 0.005); ctx.setLineDash([d(0.08), d(0.05)]);
+    ctx.strokeRect(backX + t, B + t, W - 2 * t, H - 2 * t);
+    ctx.strokeRect(frontX + t, B + t, W - 2 * t, H - 2 * t);
+    if (S - 2 * sm > 0) ctx.strokeRect(spineX + sm, B + t, S - 2 * sm, H - 2 * t);
+    ctx.setLineDash([]);
+    // Barcode box: lower right of the back cover
+    const bw = u.barcodeW * k, bh = u.barcodeH * k, bm = u.barcodeMargin * k;
+    const bx = spineX - bm - bw, by = B + H - bm - bh;
+    ctx.fillStyle = "#FFE45C"; ctx.fillRect(bx, by, bw, bh);
+    ctx.strokeStyle = "#8A7300"; ctx.lineWidth = Math.max(px, 0.004); ctx.strokeRect(bx, by, bw, bh);
+
+    const font = (size, weight) => (weight || 400) + " " + size + "px 'Public Sans', Arial, sans-serif";
+    // Fonts are given in inches, then converted by the scale.
+    const text = (str, x, y, size, opts) => {
+      opts = opts || {};
+      ctx.save(); ctx.translate(x, y); if (opts.rotate) ctx.rotate(opts.rotate);
+      ctx.scale(1 / 100, 1 / 100);
+      ctx.font = font(size * 100, opts.weight); ctx.fillStyle = opts.color || "#1C2430";
+      ctx.textAlign = opts.align || "left"; ctx.textBaseline = opts.base || "alphabetic";
+      ctx.fillText(str, 0, 0); ctx.restore();
+    };
+    const fs = Math.min(0.22, W / 16), small = fs * 0.62;
+    // Labels
+    text("BACK COVER", backX + W / 2, B + H * 0.42, fs * 1.3, { align: "center", weight: 600, color: "#4A5566" });
+    text("FRONT COVER", frontX + W / 2, B + H * 0.42, fs * 1.3, { align: "center", weight: 600, color: "#4A5566" });
+    text(f3(r.trimWidth) + '" x ' + f3(r.trimHeight) + '" (trim size)', backX + W / 2, B + H * 0.42 + fs * 1.1, small, { align: "center", color: "#4A5566" });
+    text(f3(r.trimWidth) + '" x ' + f3(r.trimHeight) + '" (trim size)', frontX + W / 2, B + H * 0.42 + fs * 1.1, small, { align: "center", color: "#4A5566" });
+    text("Barcode " + f3(r.barcodeWidth) + '" x ' + f3(r.barcodeHeight) + '"', bx + bw / 2, by + bh / 2, Math.min(small, bw / 12), { align: "center", base: "middle", weight: 600, color: "#3A3000" });
+    // Info block on the front cover, inside the safe zone
+    const lines = [
+      "Full cover: " + f3(r.fullWidth) + '" x ' + f3(r.fullHeight) + '" = ' + r.pixelWidth + " x " + r.pixelHeight + " px at 300 DPI",
+      "Spine: " + f3(r.spineWidth) + '" for ' + r.pages + " pages, " + r.paperName.toLowerCase(),
+      r.bleed ? 'Bleed: 0.125" on every outside edge (pink)' : "No bleed added. This is not the upload size.",
+      r.spineTextAllowed ? "Spine text: allowed (more than 79 pages)" : "Spine text: not allowed (79 pages or fewer)",
+      "Keep words inside the green dashes.",
+      "Hide or delete this guide layer before you upload.",
+    ];
+    lines.forEach((l, i) => text(l, frontX + t + 0.1, B + t + 0.2 + small + i * small * 1.5, small * 0.9, { color: "#1C2430" }));
+    text("Free template from 2 Broke Yoopers, 2brokeyoopers.github.io/tools", backX + t + 0.1, B + H - t - 0.12, small * 0.75, { color: "#7A8594" });
+    // Spine label, running top to bottom like a real spine
+    if (S >= 0.12) {
+      const sl = r.spineTextAllowed ? "SPINE " + f3(r.spineWidth) + '"' : "SPINE " + f3(r.spineWidth) + '" (no text)';
+      text(sl, spineX + S / 2, B + H / 2, Math.min(small, S * 0.45), { rotate: Math.PI / 2, align: "center", base: "middle", weight: 600, color: "#2B5DA8" });
+    }
+  }
+
+  function drawPreview(r) {
+    const c = $("preview"); if (!c) return;
+    const cssW = c.clientWidth || 600, dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const ppi = (cssW * dpr) / r.fullWidth;
+    c.width = Math.round(cssW * dpr); c.height = Math.round(r.fullHeight * ppi);
+    const ctx = c.getContext("2d"); ctx.setTransform(ppi, 0, 0, ppi, 0, 0);
+    drawScene(ctx, r, ppi);
+  }
+
+  // PNG writer. It draws the template in strips, so very large covers work on phones too,
+  // and it stamps the file as 300 DPI so design programs open it at the right size.
+  const CRC = (() => { const t = new Uint32Array(256); for (let n = 0; n < 256; n++) { let c = n; for (let k = 0; k < 8; k++) c = c & 1 ? 0xEDB88320 ^ (c >>> 1) : c >>> 1; t[n] = c >>> 0; } return t; })();
+  function crc32(bytes) { let c = 0xFFFFFFFF; for (let i = 0; i < bytes.length; i++) c = CRC[(c ^ bytes[i]) & 255] ^ (c >>> 8); return (c ^ 0xFFFFFFFF) >>> 0; }
+  function chunk(type, data) {
+    const out = new Uint8Array(12 + data.length), dv = new DataView(out.buffer);
+    dv.setUint32(0, data.length); for (let i = 0; i < 4; i++) out[4 + i] = type.charCodeAt(i);
+    out.set(data, 8); dv.setUint32(8 + data.length, crc32(out.subarray(4, 8 + data.length))); return out;
+  }
+  async function makePng(r) {
+    const W = r.pixelWidth, H = r.pixelHeight, ppi = 300, band = 256;
+    const c = document.createElement("canvas"); c.width = W; c.height = band;
+    const ctx = c.getContext("2d", { willReadFrequently: true });
+    const cs = new CompressionStream("deflate"); const writer = cs.writable.getWriter();
+    const collected = new Response(cs.readable).arrayBuffer();
+    for (let y0 = 0; y0 < H; y0 += band) {
+      const rows = Math.min(band, H - y0);
+      ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.clearRect(0, 0, W, band);
+      ctx.setTransform(ppi, 0, 0, ppi, 0, -y0); drawScene(ctx, r, ppi);
+      const img = ctx.getImageData(0, 0, W, rows).data;
+      const buf = new Uint8Array(rows * (W * 3 + 1));
+      let o = 0;
+      for (let y = 0; y < rows; y++) { buf[o++] = 0; let i = y * W * 4; for (let x = 0; x < W; x++, i += 4) { buf[o++] = img[i]; buf[o++] = img[i + 1]; buf[o++] = img[i + 2]; } }
+      await writer.write(buf);
+      $("dlstatus").textContent = "Drawing your template, " + Math.min(100, Math.round(((y0 + rows) / H) * 100)) + "% done.";
+    }
+    await writer.close();
+    const idat = new Uint8Array(await collected);
+    const ihdr = new Uint8Array(13), dv = new DataView(ihdr.buffer);
+    dv.setUint32(0, W); dv.setUint32(4, H); ihdr[8] = 8; ihdr[9] = 2; ihdr[10] = 0; ihdr[11] = 0; ihdr[12] = 0;
+    const phys = new Uint8Array(9), pv = new DataView(phys.buffer); const ppm = Math.round(300 / 0.0254);
+    pv.setUint32(0, ppm); pv.setUint32(4, ppm); phys[8] = 1;
+    const sig = new Uint8Array([137, 80, 78, 71, 13, 10, 26, 10]);
+    return new Blob([sig, chunk("IHDR", ihdr), chunk("pHYs", phys), chunk("IDAT", idat), chunk("IEND", new Uint8Array(0))], { type: "image/png" });
+  }
+  async function download() {
+    if (!current) return;
+    const btn = $("dl"), st = $("dlstatus"), r = current;
+    btn.disabled = true; st.textContent = "Drawing your template.";
+    try {
+      if (typeof CompressionStream === "undefined") throw new Error("old browser");
+      const blob = await makePng(r);
+      const name = "KDP-cover-template-" + f3(r.trimWidth) + "x" + f3(r.trimHeight) + "-" + r.pages + "pages-" + r.paper + (r.bleed ? "" : "-no-bleed") + ".png";
+      const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = name;
+      document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 10000);
+      st.textContent = "Done. Your template is " + r.pixelWidth + " x " + r.pixelHeight + " pixels at 300 DPI. Thank you!";
+    } catch (e) {
+      st.textContent = "Sorry, this browser could not make the file. Please try a current Chrome, Edge, Firefox or Safari.";
+    } finally { btn.disabled = false; }
+  }
+
+  [trimSel, bleedSel].forEach((el) => el.addEventListener("change", render));
+  [pagesIn, cw, ch].forEach((el) => el.addEventListener("input", render));
+  document.querySelectorAll("input[name=paper]").forEach((el) => el.addEventListener("change", render));
+  let rt; window.addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(() => current && drawPreview(current), 150); });
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => current && drawPreview(current));
+  render();
+  window.__coverCalc = { makePng: () => makePng(current), current: () => current };
+})();
+</script>
+</body>
+</html>

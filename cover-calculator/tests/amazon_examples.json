@@ -1,0 +1,899 @@
+{
+ "source": "Amazon KDP Print Cover Calculator, https://kdp.amazon.com/cover-calculator (linked from the KDP help page Create a Paperback Cover, https://kdp.amazon.com/en_US/help/topic/G201953020). Each row is Amazon's own answer, read from its measurements-table reply in inches.",
+ "captured": "2026-11-04",
+ "examples": [
+  {
+   "trim": "6 x 9",
+   "paper": "white",
+   "pages": 300,
+   "amazon_request": {
+    "interiorType": "BLACK_AND_WHITE",
+    "paperType": "WHITE",
+    "trimSize": "6X9IN",
+    "pageCount": 300
+   },
+   "full_cover": [
+    12.926,
+    9.25
+   ],
+   "front_cover": [
+    6.0,
+    9.0
+   ],
+   "safe_area": [
+    5.875,
+    8.75
+   ],
+   "bleed": [
+    0.125,
+    0.125
+   ],
+   "margin": [
+    0.125,
+    0.125
+   ],
+   "spine": [
+    0.676,
+    9.0
+   ],
+   "spine_safe_area": [
+    0.551,
+    8.75
+   ],
+   "spine_margin": [
+    0.062,
+    0.062
+   ],
+   "barcode_margin": [
+    0.25,
+    0.25
+   ]
+  },
+  {
+   "trim": "5 x 8",
+   "paper": "white",
+   "pages": 24,
+   "amazon_request": {
+    "interiorType": "BLACK_AND_WHITE",
+    "paperType": "WHITE",
+    "trimSize": "5X8IN",
+    "pageCount": 24
+   },
+   "full_cover": [
+    10.304,
+    8.25
+   ],
+   "front_cover": [
+    5.0,
+    8.0
+   ],
+   "safe_area": [
+    4.875,
+    7.75
+   ],
+   "bleed": [
+    0.125,
+    0.125
+   ],
+   "margin": [
+    0.125,
+    0.125
+   ],
+   "spine": [
+    0.054,
+    8.0
+   ],
+   "spine_safe_area": [
+    0.0,
+    7.75
+   ],
+   "spine_margin": [
+    0.062,
+    0.062
+   ],
+   "barcode_margin": [
+    0.25,
+    0.25
+   ]
+  },
+  {
+   "trim": "5 x 8",
+   "paper": "white",
+   "pages": 79,
+   "amazon_request": {
+    "interiorType": "BLACK_AND_WHITE",
+    "paperType": "WHITE",
+    "trimSize": "5X8IN",
+    "pageCount": 79
+   },
+   "full_cover": [
+    10.428,
+    8.25
+   ],
+   "front_cover": [
+    5.0,
+    8.0
+   ],
+   "safe_area": [
+    4.875,
+    7.75
+   ],
+   "bleed": [
+    0.125,
+    0.125
+   ],
+   "margin": [
+    0.125,
+    0.125
+   ],
+   "spine": [
+    0.178,
+    8.0
+   ],
+   "spine_safe_area": [
+    0.053,
+    7.75
+   ],
+   "spine_margin": [
+    0.062,
+    0.062
+   ],
+   "barcode_margin": [
+    0.25,
+    0.25
+   ]
+  },
+  {
+   "trim": "5 x 8",
+   "paper": "cream",
+   "pages": 80,
+   "amazon_request": {
+    "interiorType": "BLACK_AND_WHITE",
+    "paperType": "CREAM",
+    "trimSize": "5X8IN",
+    "pageCount": 80
+   },
+   "full_cover": [
+    10.45,
+    8.25
+   ],
+   "front_cover": [
+    5.0,
+    8.0
+   ],
+   "safe_area": [
+    4.875,
+    7.75
+   ],
+   "bleed": [
+    0.125,
+    0.125
+   ],
+   "margin": [
+    0.125,
+    0.125
+   ],
+   "spine": [
+    0.2,
+    8.0
+   ],
+   "spine_safe_area": [
+    0.075,
+    7.75
+   ],
+   "spine_margin": [
+    0.062,
+    0.062
+   ],
+   "barcode_margin": [
+    0.25,
+    0.25
+   ]
+  },
+  {
+   "trim": "5.25 x 8",
+   "paper": "cream",
+   "pages": 150,
+   "amazon_request": {
+    "interiorType": "BLACK_AND_WHITE",
+    "paperType": "CREAM",
+    "trimSize": "5_25X8IN",
+    "pageCount": 150
+   },
+   "full_cover": [
+    11.125,
+    8.25
+   ],
+   "front_cover": [
+    5.25,
+    8.0
+   ],
+   "safe_area": [
+    5.125,
+    7.75
+   ],
+   "bleed": [
+    0.125,
+    0.125
+   ],
+   "margin": [
+    0.125,
+    0.125
+   ],
+   "spine": [
+    0.375,
+    8.0
+   ],
+   "spine_safe_area": [
+    0.25,
+    7.75
+   ],
+   "spine_margin": [
+    0.062,
+    0.062
+   ],
+   "barcode_margin": [
+    0.25,
+    0.25
+   ]
+  },
+  {
+   "trim": "5.5 x 8.5",
+   "paper": "white",
+   "pages": 222,
+   "amazon_request": {
+    "interiorType": "BLACK_AND_WHITE",
+    "paperType": "WHITE",
+    "trimSize": "5_5X8_5IN",
+    "pageCount": 222
+   },
+   "full_cover": [
+    11.75,
+    8.75
+   ],
+   "front_cover": [
+    5.5,
+    8.5
+   ],
+   "safe_area": [
+    5.375,
+    8.25
+   ],
+   "bleed": [
+    0.125,
+    0.125
+   ],
+   "margin": [
+    0.125,
+    0.125
+   ],
+   "spine": [
+    0.5,
+    8.5
+   ],
+   "spine_safe_area": [
+    0.375,
+    8.25
+   ],
+   "spine_margin": [
+    0.062,
+    0.062
+   ],
+   "barcode_margin": [
+    0.25,
+    0.25
+   ]
+  },
+  {
+   "trim": "6 x 9",
+   "paper": "cream",
+   "pages": 400,
+   "amazon_request": {
+    "interiorType": "BLACK_AND_WHITE",
+    "paperType": "CREAM",
+    "trimSize": "6X9IN",
+    "pageCount": 400
+   },
+   "full_cover": [
+    13.25,
+    9.25
+   ],
+   "front_cover": [
+    6.0,
+    9.0
+   ],
+   "safe_area": [
+    5.875,
+    8.75
+   ],
+   "bleed": [
+    0.125,
+    0.125
+   ],
+   "margin": [
+    0.125,
+    0.125
+   ],
+   "spine": [
+    1.0,
+    9.0
+   ],
+   "spine_safe_area": [
+    0.875,
+    8.75
+   ],
+   "spine_margin": [
+    0.062,
+    0.062
+   ],
+   "barcode_margin": [
+    0.25,
+    0.25
+   ]
+  },
+  {
+   "trim": "5.06 x 7.81",
+   "paper": "cream",
+   "pages": 776,
+   "amazon_request": {
+    "interiorType": "BLACK_AND_WHITE",
+    "paperType": "CREAM",
+    "trimSize": "5_06X7_81IN",
+    "pageCount": 776
+   },
+   "full_cover": [
+    12.31,
+    8.06
+   ],
+   "front_cover": [
+    5.06,
+    7.81
+   ],
+   "safe_area": [
+    4.935,
+    7.56
+   ],
+   "bleed": [
+    0.125,
+    0.125
+   ],
+   "margin": [
+    0.125,
+    0.125
+   ],
+   "spine": [
+    1.94,
+    7.81
+   ],
+   "spine_safe_area": [
+    1.815,
+    7.56
+   ],
+   "spine_margin": [
+    0.062,
+    0.062
+   ],
+   "barcode_margin": [
+    0.25,
+    0.25
+   ]
+  },
+  {
+   "trim": "6.14 x 9.21",
+   "paper": "white",
+   "pages": 828,
+   "amazon_request": {
+    "interiorType": "BLACK_AND_WHITE",
+    "paperType": "WHITE",
+    "trimSize": "6_14X9_21IN",
+    "pageCount": 828
+   },
+   "full_cover": [
+    14.395,
+    9.46
+   ],
+   "front_cover": [
+    6.14,
+    9.21
+   ],
+   "safe_area": [
+    6.015,
+    8.96
+   ],
+   "bleed": [
+    0.125,
+    0.125
+   ],
+   "margin": [
+    0.125,
+    0.125
+   ],
+   "spine": [
+    1.865,
+    9.21
+   ],
+   "spine_safe_area": [
+    1.74,
+    8.96
+   ],
+   "spine_margin": [
+    0.062,
+    0.062
+   ],
+   "barcode_margin": [
+    0.25,
+    0.25
+   ]
+  },
+  {
+   "trim": "6.69 x 9.61",
+   "paper": "white",
+   "pages": 501,
+   "amazon_request": {
+    "interiorType": "BLACK_AND_WHITE",
+    "paperType": "WHITE",
+    "trimSize": "6_69X9_61IN",
+    "pageCount": 501
+   },
+   "full_cover": [
+    14.758,
+    9.86
+   ],
+   "front_cover": [
+    6.69,
+    9.61
+   ],
+   "safe_area": [
+    6.565,
+    9.36
+   ],
+   "bleed": [
+    0.125,
+    0.125
+   ],
+   "margin": [
+    0.125,
+    0.125
+   ],
+   "spine": [
+    1.128,
+    9.61
+   ],
+   "spine_safe_area": [
+    1.003,
+    9.36
+   ],
+   "spine_margin": [
+    0.062,
+    0.062
+   ],
+   "barcode_margin": [
+    0.25,
+    0.25
+   ]
+  },
+  {
+   "trim": "7 x 10",
+   "paper": "standard",
+   "pages": 72,
+   "amazon_request": {
+    "interiorType": "STANDARD_COLOR",
+    "paperType": "WHITE",
+    "trimSize": "7X10IN",
+    "pageCount": 72
+   },
+   "full_cover": [
+    14.412,
+    10.25
+   ],
+   "front_cover": [
+    7.0,
+    10.0
+   ],
+   "safe_area": [
+    6.875,
+    9.75
+   ],
+   "bleed": [
+    0.125,
+    0.125
+   ],
+   "margin": [
+    0.125,
+    0.125
+   ],
+   "spine": [
+    0.162,
+    10.0
+   ],
+   "spine_safe_area": [
+    0.037,
+    9.75
+   ],
+   "spine_margin": [
+    0.062,
+    0.062
+   ],
+   "barcode_margin": [
+    0.25,
+    0.25
+   ]
+  },
+  {
+   "trim": "7.44 x 9.69",
+   "paper": "cream",
+   "pages": 333,
+   "amazon_request": {
+    "interiorType": "BLACK_AND_WHITE",
+    "paperType": "CREAM",
+    "trimSize": "7_44X9_69IN",
+    "pageCount": 333
+   },
+   "full_cover": [
+    15.962,
+    9.94
+   ],
+   "front_cover": [
+    7.44,
+    9.69
+   ],
+   "safe_area": [
+    7.315,
+    9.44
+   ],
+   "bleed": [
+    0.125,
+    0.125
+   ],
+   "margin": [
+    0.125,
+    0.125
+   ],
+   "spine": [
+    0.832,
+    9.69
+   ],
+   "spine_safe_area": [
+    0.707,
+    9.44
+   ],
+   "spine_margin": [
+    0.062,
+    0.062
+   ],
+   "barcode_margin": [
+    0.25,
+    0.25
+   ]
+  },
+  {
+   "trim": "7.5 x 9.25",
+   "paper": "premium",
+   "pages": 250,
+   "amazon_request": {
+    "interiorType": "PREMIUM_COLOR",
+    "paperType": "COLOR",
+    "trimSize": "7_5X9_25IN",
+    "pageCount": 250
+   },
+   "full_cover": [
+    15.837,
+    9.5
+   ],
+   "front_cover": [
+    7.5,
+    9.25
+   ],
+   "safe_area": [
+    7.375,
+    9.0
+   ],
+   "bleed": [
+    0.125,
+    0.125
+   ],
+   "margin": [
+    0.125,
+    0.125
+   ],
+   "spine": [
+    0.587,
+    9.25
+   ],
+   "spine_safe_area": [
+    0.462,
+    9.0
+   ],
+   "spine_margin": [
+    0.062,
+    0.062
+   ],
+   "barcode_margin": [
+    0.25,
+    0.25
+   ]
+  },
+  {
+   "trim": "8 x 10",
+   "paper": "standard",
+   "pages": 600,
+   "amazon_request": {
+    "interiorType": "STANDARD_COLOR",
+    "paperType": "WHITE",
+    "trimSize": "8X10IN",
+    "pageCount": 600
+   },
+   "full_cover": [
+    17.601,
+    10.25
+   ],
+   "front_cover": [
+    8.0,
+    10.0
+   ],
+   "safe_area": [
+    7.875,
+    9.75
+   ],
+   "bleed": [
+    0.125,
+    0.125
+   ],
+   "margin": [
+    0.125,
+    0.125
+   ],
+   "spine": [
+    1.351,
+    10.0
+   ],
+   "spine_safe_area": [
+    1.226,
+    9.75
+   ],
+   "spine_margin": [
+    0.062,
+    0.062
+   ],
+   "barcode_margin": [
+    0.25,
+    0.25
+   ]
+  },
+  {
+   "trim": "8.5 x 11",
+   "paper": "premium",
+   "pages": 120,
+   "amazon_request": {
+    "interiorType": "PREMIUM_COLOR",
+    "paperType": "COLOR",
+    "trimSize": "8_5X11IN",
+    "pageCount": 120
+   },
+   "full_cover": [
+    17.532,
+    11.25
+   ],
+   "front_cover": [
+    8.5,
+    11.0
+   ],
+   "safe_area": [
+    8.375,
+    10.75
+   ],
+   "bleed": [
+    0.125,
+    0.125
+   ],
+   "margin": [
+    0.125,
+    0.125
+   ],
+   "spine": [
+    0.282,
+    11.0
+   ],
+   "spine_safe_area": [
+    0.157,
+    10.75
+   ],
+   "spine_margin": [
+    0.062,
+    0.062
+   ],
+   "barcode_margin": [
+    0.25,
+    0.25
+   ]
+  },
+  {
+   "trim": "8.27 x 11.69",
+   "paper": "white",
+   "pages": 100,
+   "amazon_request": {
+    "interiorType": "BLACK_AND_WHITE",
+    "paperType": "WHITE",
+    "trimSize": "8_27X11_69IN",
+    "pageCount": 100
+   },
+   "full_cover": [
+    17.015,
+    11.94
+   ],
+   "front_cover": [
+    8.27,
+    11.69
+   ],
+   "safe_area": [
+    8.145,
+    11.44
+   ],
+   "bleed": [
+    0.125,
+    0.125
+   ],
+   "margin": [
+    0.125,
+    0.125
+   ],
+   "spine": [
+    0.225,
+    11.69
+   ],
+   "spine_safe_area": [
+    0.1,
+    11.44
+   ],
+   "spine_margin": [
+    0.062,
+    0.062
+   ],
+   "barcode_margin": [
+    0.25,
+    0.25
+   ]
+  },
+  {
+   "trim": "8.25 x 6",
+   "paper": "premium",
+   "pages": 48,
+   "amazon_request": {
+    "interiorType": "PREMIUM_COLOR",
+    "paperType": "COLOR",
+    "trimSize": "8_25X6IN",
+    "pageCount": 48
+   },
+   "full_cover": [
+    16.863,
+    6.25
+   ],
+   "front_cover": [
+    8.25,
+    6.0
+   ],
+   "safe_area": [
+    8.125,
+    5.75
+   ],
+   "bleed": [
+    0.125,
+    0.125
+   ],
+   "margin": [
+    0.125,
+    0.125
+   ],
+   "spine": [
+    0.113,
+    6.0
+   ],
+   "spine_safe_area": [
+    0.0,
+    5.75
+   ],
+   "spine_margin": [
+    0.062,
+    0.062
+   ],
+   "barcode_margin": [
+    0.25,
+    0.25
+   ]
+  },
+  {
+   "trim": "8.25 x 8.25",
+   "paper": "standard",
+   "pages": 90,
+   "amazon_request": {
+    "interiorType": "STANDARD_COLOR",
+    "paperType": "WHITE",
+    "trimSize": "8_25X8_25IN",
+    "pageCount": 90
+   },
+   "full_cover": [
+    16.953,
+    8.5
+   ],
+   "front_cover": [
+    8.25,
+    8.25
+   ],
+   "safe_area": [
+    8.125,
+    8.0
+   ],
+   "bleed": [
+    0.125,
+    0.125
+   ],
+   "margin": [
+    0.125,
+    0.125
+   ],
+   "spine": [
+    0.203,
+    8.25
+   ],
+   "spine_safe_area": [
+    0.078,
+    8.0
+   ],
+   "spine_margin": [
+    0.062,
+    0.062
+   ],
+   "barcode_margin": [
+    0.25,
+    0.25
+   ]
+  },
+  {
+   "trim": "8.5 x 8.5",
+   "paper": "premium",
+   "pages": 32,
+   "amazon_request": {
+    "interiorType": "PREMIUM_COLOR",
+    "paperType": "COLOR",
+    "trimSize": "8_5X8_5IN",
+    "pageCount": 32
+   },
+   "full_cover": [
+    17.325,
+    8.75
+   ],
+   "front_cover": [
+    8.5,
+    8.5
+   ],
+   "safe_area": [
+    8.375,
+    8.25
+   ],
+   "bleed": [
+    0.125,
+    0.125
+   ],
+   "margin": [
+    0.125,
+    0.125
+   ],
+   "spine": [
+    0.075,
+    8.5
+   ],
+   "spine_safe_area": [
+    0.0,
+    8.25
+   ],
+   "spine_margin": [
+    0.062,
+    0.062
+   ],
+   "barcode_margin": [
+    0.25,
+    0.25
+   ]
+  }
+ ]
+}

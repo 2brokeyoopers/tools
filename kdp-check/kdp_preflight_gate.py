@@ -1047,7 +1047,7 @@ def paid_result_text(result: GateResult) -> str:
         lines.extend([
             "",
             f"Stuck, or think this is wrong? Email {SUPPORT_EMAIL} and we will",
-            "help you get it working, or refund your $19.99. Copy this whole",
+            "help you get it working, or refund what you paid. Copy this whole",
             "message into the email, including this reference: " + ", ".join(codes),
         ])
     elif result.status == "REVIEW":
