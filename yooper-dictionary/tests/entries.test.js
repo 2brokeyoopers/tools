@@ -7,7 +7,7 @@ const path = require('node:path');
 const WORDS = require(process.env.YD_WORDS ? path.resolve(process.env.YD_WORDS) : path.join(__dirname, '..', 'words.js'));
 const PAGE = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
 
-const SLOGAN = 'From 2 Broke Yoopers - affordable products built for fun, function, and honest value.';
+const SLOGAN = 'From 2 Broke Yoopers — affordable products built for fun, function, and honest value.';
 const filled = s => typeof s === 'string' && s.trim().length > 0;
 
 test('there are at least 150 words', () => {

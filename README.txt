@@ -78,6 +78,16 @@ SUSPEND_DATE: 2026-12-04
 MAX_IDLE_DAYS: 14
 STATUS: built on branch dictionary-next, pull request open for Mike, not merged
 
+TO-DO LIST (Gemini Pro ranked it 2026-11-04, Gemini chat named dictionary; tick in place, one task at a time)
+Card: dictionary, in company plan 6.26\2BY_CURRENT_STATE_READ_FIRST.txt
+[ ] 0. Mike merges pull request #2 so the 153-word page goes live. Done when the live page shows 153 words.
+[ ] 1. Printable PDF of the dictionary, used as the free gift in Mike's buy-one-get-one deal. Gemini: adds value to close sales without competing with the free page. Mike approves the PDF. Needs from Mike: what the deal is and where it runs.
+[ ] 2. Shirts and other print-on-demand items from the funniest words. Gemini: Yooper slang shirts sell well in the U.P. Goes through the normal design rules and Mike's approval.
+[ ] 3. Facebook post on the 2BY Page asking fans for more words, linking the page. Gemini: free reach and new words. New kind of post, so Mike sees it first (rulebook overrides Gemini's "no approval").
+[ ] 4. Button on 2brokeyoopers.com linking the dictionary. Gemini: steady free traffic. Mike clicks Publish in Carrd (website card rule).
+[ ] 5. Sell the printable on its own on Payhip and Etsy at $3.99 (Gemini's price). Gemini ranked it last because the web page is free. Mike approves the listing and price.
+Later, not ranked: a suggest-a-word form on the page, real recordings for the Hear it button.
+
 WHAT IS IN THE DICTIONARY FOLDER
 - index.html - the page.
 - words.js - the word list. Each entry: term, pos, optional say and alt spellings, def (plain meaning), ex (example), source (name and web address).
@@ -100,7 +110,7 @@ HOW A WORD GETS IN
 4. Meanings are written in our own plain words. Example sentences are our own, short, polite and fun.
 
 DECISIONS (made without asking, as the job asked)
-- Slogan line (dictionary page only): the job text gave "From 2 Broke Yoopers - affordable products built for fun, function, and honest value." with a plain hyphen. The page uses that exact line as its last words. The tools home page still uses the older long-dash version; left alone because it is outside this job.
+- Slogan line: changed 2026-11-04 to the long-dash wording the rulebook fixes and every other page on this site uses. Test 8 checks it and was shown failing on the old dash.
 - "Yeah, no" was on the old page as meaning yes. The source says the last word is the real answer, so "yeah, no" means no. Fixed.
 - The old page's 30 entries had no sources. Each was re-checked. Ones a source confirmed stayed (reworded). Ones no checked page confirmed were dropped and are listed below as UNVERIFIED.
 - One source per entry: the page that best confirms it, preferring news, university, tourism and Wikipedia pages over personal blogs when both had it.
