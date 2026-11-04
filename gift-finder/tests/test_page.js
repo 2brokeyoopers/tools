@@ -27,7 +27,8 @@ function breakPage(html) {
     .replace(/a\.shop \{[^}]*\}/, "a.shop { font-size: .8rem; }")
     .replace("'<ol class=\"gifts\">' + found.picks.map", "'<ol class=\"gifts\">' + found.picks.slice(0, 1).map")
     .replace("found.nearby.map", "found.nearby.slice(0, 0).map")
-    .replace('["10", "25", "50", "0"]', 'Object.keys(G.BUDGETS)');
+    .replace('["10", "25", "50", "0"]', 'Object.keys(G.BUDGETS)')
+    .replace('id="share">Share this list', 'id="nothing">Share this list');
 }
 
 function serve(broken) {
@@ -90,6 +91,27 @@ async function checks(broken) {
   ok("phone: every gift button is big enough to tap (44 px or taller)", hrefs.length && shopSmall === 0, shopSmall + " too small");
   const wide2 = await page.evaluate(() => document.documentElement.scrollWidth - 375);
   ok("phone: the results do not stick out sideways either", wide2 <= 0, wide2 + " px too wide");
+
+  // Share this list: on a phone it opens the share sheet, elsewhere it copies to the clipboard.
+  // Both must carry every gift name and link on screen, so family gets the whole list in one text.
+  const shown = await page.$$eval("#result li", (lis) => lis.map((li) => [li.querySelector(".gname").textContent, li.querySelector("a.shop").getAttribute("href")]));
+  const missingFrom = (text) => shown.filter(([n, u]) => !(text || "").includes(n) || !(text || "").includes(u)).map(([n]) => n);
+  let shareSheet = "", clip = "", status = "", shareWhy = "";
+  try {
+    await page.evaluate(() => { window.__shared = null; navigator.share = (d) => { window.__shared = d; return Promise.resolve(); }; document.querySelector("#share").click(); });
+    await page.waitForTimeout(200);
+    shareSheet = await page.evaluate(() => (window.__shared ? window.__shared.text : ""));
+    await ctx.grantPermissions(["clipboard-read", "clipboard-write"], { origin: base.replace(/\/gift-finder\/$/, "") });
+    await page.evaluate(() => { navigator.share = undefined; document.querySelector("#share").click(); });
+    await page.waitForTimeout(300);
+    clip = await page.evaluate(() => navigator.clipboard.readText());
+    status = (await page.textContent("#share-status")) || "";
+  } catch (e) { shareWhy = String(e.message || e).split("\n")[0]; }
+  const sheetMiss = missingFrom(shareSheet), clipMiss = missingFrom(clip);
+  ok("Share this list opens the phone's share sheet with every gift name and link", shown.length && shareSheet && sheetMiss.length === 0, shareWhy || "missing: " + sheetMiss.join(", "));
+  ok("Share this list copies every gift name and link when there is no share sheet, and says thank you", shown.length && clip && clipMiss.length === 0 && /copied/i.test(status) && /thank/i.test(status), shareWhy || "missing: " + clipMiss.join(", ") + " status: " + status);
+  const shareSmall = await page.$$eval("#share", (els) => els.length !== 1 || els[0].getBoundingClientRect().height < 44);
+  ok("phone: Share this list is one big enough button (44 px or taller)", !shareSmall);
 
   // The hard case: a kid, under $10, kids stuff. Few true matches, so close picks must show and be labeled.
   await page.evaluate(() => document.querySelectorAll("#finder input").forEach((i) => { i.checked = false; }));

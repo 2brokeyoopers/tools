@@ -67,12 +67,18 @@ ol.gifts li { border: 1.5px solid var(--line); border-radius: 4px; padding: 1rem
 .gblurb { font: 400 .98rem/1.55 var(--sans); color: var(--ink-soft); margin: 0 0 .6rem; }
 a.shop { display: inline-block; font: 600 1rem/1.2 var(--sans); padding: .75rem 1rem; min-height: 2.75rem; border: 1.5px solid var(--blue); border-radius: 4px; text-decoration: none; }
 a.shop:focus-visible { outline: 3px solid var(--blue); outline-offset: 2px; }
+.share-row { margin: 1.25rem 0 0; display: grid; gap: .5rem; }
+button.share { font: 600 1rem/1.2 var(--sans); color: var(--pine); background: var(--paper); border: 2px solid var(--pine); border-radius: 4px; padding: .8rem 1.2rem; min-height: 2.9rem; cursor: pointer; justify-self: start; }
+button.share:focus-visible { outline: 3px solid var(--blue); outline-offset: 3px; }
+#share-status { font: 400 .95rem/1.5 var(--sans); margin: 0; }
+#share-status:empty { display: none; }
+textarea.share-copy { width: 100%; min-height: 9rem; font: 400 .9rem/1.45 var(--sans); color: var(--ink); background: var(--ground); border: 1.5px solid var(--line); border-radius: 4px; padding: .6rem; }
 .again { font: 400 .95rem/1.5 var(--sans); margin: 1.25rem 0 0; }
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
 .small { font: 400 .9rem/1.5 var(--sans); color: var(--ink-soft); }
 footer { margin-top: 2.5rem; font: 400 .92rem/1.5 var(--sans); color: var(--ink-soft); }
 footer p { margin: 0 0 .75rem; }
-@media (max-width: 30rem) { .choices { grid-template-columns: 1fr; } button.go, a.shop { width: 100%; text-align: center; } }
+@media (max-width: 30rem) { .choices { grid-template-columns: 1fr; } button.go, button.share, a.shop { width: 100%; text-align: center; } }
 </style>
 </head>
 <body>
@@ -163,11 +169,45 @@ footer p { margin: 0 0 .75rem; }
       '<ol class="gifts">' + found.picks.map(function (g) { return card(g, false); }).join("") +
       found.nearby.map(function (g) { return card(g, true); }).join("") + "</ol>" +
       (found.nearby.length ? '<p class="small">Close picks miss at least one of your answers, the budget or what they like. We thought you would want to see them anyway.</p>' : "") +
+      '<div class="share-row"><button type="button" class="share" id="share">Share this list</button>' +
+      '<p id="share-status" role="status" aria-live="polite"></p></div>' +
       '<p class="again">Thank you for looking! Want different ideas? Please change an answer above and tap the button again.</p></div>';
     result.innerHTML = html;
+    lastList = found.picks.concat(found.nearby);
     var still = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     result.scrollIntoView({ behavior: still ? "auto" : "smooth", block: "start" });
     result.querySelector(".big").focus({ preventScroll: true });
+  });
+
+  // Share this list: the phone's share sheet when there is one, otherwise copy to the clipboard,
+  // otherwise show the text ready to copy by hand. Each gift's name, price and its own link.
+  var lastList = [];
+  function shareText(list) {
+    return "Gift ideas from the Yooper Gift Finder by 2 Broke Yoopers:\n\n" +
+      list.map(function (g, i) { return (i + 1) + ". " + g.name + " (" + g.priceText + ")\n" + g.url; }).join("\n\n") +
+      "\n\nThey have printables too, instant downloads to print at home.\nFind more gift ideas: https://2brokeyoopers.github.io/tools/gift-finder/\n\n" +
+      "From 2 Broke Yoopers \u2014 affordable products built for fun, function, and honest value.";
+  }
+  function showStatus(msg) { var el = document.getElementById("share-status"); if (el) el.textContent = msg; }
+  function copyByHand(text) {
+    showStatus("Sorry, this phone would not let us copy. Please copy the list below. Thank you!");
+    var box = document.createElement("textarea");
+    box.className = "share-copy"; box.readOnly = true; box.value = text;
+    document.getElementById("share-status").after(box);
+    box.focus(); box.select();
+  }
+  result.addEventListener("click", function (e) {
+    if (!e.target.closest || !e.target.closest("#share")) return;
+    var text = shareText(lastList);
+    if (navigator.share) {
+      navigator.share({ title: "Gift ideas from 2 Broke Yoopers", text: text })
+        .then(function () { showStatus("Thank you for sharing!"); })
+        .catch(function (err) { if (!err || err.name !== "AbortError") copyByHand(text); });
+    } else if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text)
+        .then(function () { showStatus("Copied! Paste it into a text to family. Thank you for sharing!"); })
+        .catch(function () { copyByHand(text); });
+    } else copyByHand(text);
   });
 
   if ("serviceWorker" in navigator) {

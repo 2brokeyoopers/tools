@@ -6,11 +6,14 @@ FINAL_TARGET: https://2brokeyoopers.github.io/tools/gift-finder/ asks who, budge
 CHECK_COMMAND: node gift-finder\tests\check_all.js   (or double-click gift-finder\CHECK THE GIFT FINDER - double click me.bat). Pass is every line FAIL=0.
 SUSPEND_DATE: 2026-12-04
 MAX_IDLE_DAYS: 30
-STATUS: BUILT 2026-11-04 on branch gift-finder, pull request open for Mike. Not merged. Gemini has not graded the finished page yet.
+STATUS: BUILT 2026-11-04 on branch gift-finder, pull request open for Mike. Not merged. Gemini Pro graded it A, PUBLISH: YES
+  (relayed by the Supervisor session), with one fix: a Share this list button. Added the same day.
 
 HOW IT WORKS
 - gifts.js holds the gift list and the matching rules. The page and the tests both use this one file.
 - index.html is the page. Three questions, then the matches. A "Psst, we have printables too" note shows with every result.
+- Share this list (under the results) opens the phone's share sheet with every gift name, price and link. Where there
+  is no share sheet it copies the list, and if copying is blocked it shows the list ready to copy by hand.
 - sw.js saves the page on the phone after the first visit, so it works at camp with no signal.
 - Matching: a gift is a match when it fits the budget AND at least one thing they like. Gifts that fit more likes,
   or suit the person, go higher. If fewer than 3 match, "Close pick" gifts fill the list, so nobody gets an empty page.
@@ -26,8 +29,9 @@ THE CHECKS (each one was seen failing on a broken input before it passed)
   --selftest serves dead pages on this computer. All 5 are caught.
 - tests/test_page.js: opens the page in Chromium at phone size (375 px). Checks no sideways scroll, big tap targets,
   polite nudge, 3+ ideas, confirmed links only, the printables note, budget order, labeled close picks for a hard
-  answer, the slogan as the last line, the start page card, and that it works with the internet switched off.
-  --selftest serves a broken copy. All 13 caught.
+  answer, Share this list (share sheet and copy both carry every name and link), the slogan as the last line, the start
+  page card, and that it works with the internet switched off. --selftest serves a broken copy. All 16 caught.
+- Share this list test was run before the button existed: 3 FAIL (PASS=13 FAIL=3). After adding it: PASS=16 FAIL=0.
 - First run, before the start page card existed: "FAIL the start page has a card for the gift finder", PASS=10 FAIL=1.
   The gift list check first failed on two printables with no likes (they could never show up). Both fixed.
 

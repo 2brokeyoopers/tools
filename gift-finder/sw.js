@@ -1,6 +1,6 @@
 // Yooper Gift Finder: keeps the page working with no signal.
 // Change the version below whenever index.html or gifts.js changes, so phones pick up the new copy.
-const CACHE = "yooper-gift-finder-v1";
+const CACHE = "yooper-gift-finder-v2";
 const ASSETS = ["./", "index.html", "gifts.js"];
 self.addEventListener("install", (e) => {
   e.waitUntil(caches.open(CACHE).then((c) => c.addAll(ASSETS)).then(() => self.skipWaiting()));
