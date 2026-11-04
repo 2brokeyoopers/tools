@@ -13,6 +13,8 @@ WHAT IS IN THIS REPO
 - yooper-dictionary/: the Yooper Dictionary
 - kdp-check/: the free KDP manuscript check
 - cover-calculator/: the KDP paperback cover size calculator (built 2026-11-04)
+- yooper-trivia/: Yooper Trivia, a random 10-question U.P. quiz (built 2026-11-04). Its own plan lines, checks and
+  sources list are in yooper-trivia/README.txt
 
 KDP COVER CALCULATOR, HOW IT WORKS
 - cover-math.js holds all the math. The page and the tests both use this one file.

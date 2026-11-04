@@ -1,0 +1,24 @@
+name: Yooper Trivia checks
+on:
+  push:
+    paths: ["yooper-trivia/**", "yooper-dictionary/**", "index.html", ".github/workflows/yooper-trivia-checks.yml"]
+  pull_request:
+    paths: ["yooper-trivia/**", "yooper-dictionary/**", "index.html", ".github/workflows/yooper-trivia-checks.yml"]
+jobs:
+  check:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install Playwright and Chromium
+        run: |
+          npm install --no-save playwright@1.47.2
+          npx playwright install chromium
+      - name: Run every check
+        run: node yooper-trivia/tests/check_all.js

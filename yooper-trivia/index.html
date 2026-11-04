@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1c4a2b">
+<title>Yooper Trivia — 2 Broke Yoopers</title>
+<meta name="description" content="Free Yooper Trivia from 2 Broke Yoopers: ten quick questions about the U.P. of Michigan. Towns, pasties, Lake Superior, wildlife, sports and sayings.">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="../yooper-dictionary/icon-192.png">
+<link rel="apple-touch-icon" href="../yooper-dictionary/icon-192.png">
+<style>
+  :root{ --pine:#1c4a2b; --lake:#1c5c96; --cream:#f6efe2; --ink:#1f2a24; --gold:#d8a43a; --good:#1e7a46; --bad:#a63a2a; --soft:#6a6052; }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:var(--cream);color:var(--ink)}
+  header{background:var(--pine);color:#fff;padding:18px 16px 22px;text-align:center;box-shadow:0 2px 10px rgba(0,0,0,.18)}
+  header h1{margin:0;font-size:1.5rem;letter-spacing:.5px}
+  header p{margin:4px 0 0;opacity:.85;font-size:.8rem}
+  .wrap{max-width:720px;margin:0 auto;padding:16px 16px 40px}
+  .card{background:#fff;border-radius:14px;padding:18px;margin-bottom:12px;box-shadow:0 2px 8px rgba(0,0,0,.06);border:1px solid #ece3d2}
+  .hero{background:linear-gradient(135deg,var(--lake),var(--pine));color:#fff;border-radius:16px;padding:20px 18px;margin-bottom:14px}
+  .hero h2{margin:0 0 6px;font-size:1.35rem}
+  .hero p{margin:0;line-height:1.45}
+  .big{display:block;width:100%;border:none;background:var(--gold);color:#3a2a00;font-weight:700;border-radius:24px;padding:14px 18px;cursor:pointer;font-size:1.05rem;margin-top:12px}
+  .big.alt{background:#fff;color:var(--pine);border:2px solid var(--pine)}
+  .big:active{transform:scale(.98)}
+  button:focus-visible,a:focus-visible{outline:3px solid var(--lake);outline-offset:2px}
+  .bar{display:flex;justify-content:space-between;font-size:.85rem;color:var(--soft);margin:0 2px 8px}
+  .progress{height:8px;background:#e6dcc8;border-radius:8px;overflow:hidden;margin-bottom:14px}
+  .progress div{height:100%;background:var(--pine);width:0;transition:width .3s}
+  .q{font-size:1.2rem;font-weight:700;line-height:1.35;margin:0 0 14px;color:var(--pine)}
+  .choices{display:grid;gap:10px}
+  .choice{width:100%;text-align:left;background:#fff;border:2px solid #d9cfba;border-radius:12px;padding:13px 14px;font-size:1rem;color:var(--ink);cursor:pointer;line-height:1.3}
+  .choice:hover:not(:disabled){border-color:var(--lake)}
+  .choice:disabled{cursor:default}
+  .choice.right{border-color:var(--good);background:#e8f5ec}
+  .choice.wrong{border-color:var(--bad);background:#fbeae6}
+  .feedback{margin-top:14px;padding:14px;border-radius:12px;background:#faf6ee;border:1px solid #ece3d2;line-height:1.45}
+  .feedback strong{display:block;margin-bottom:6px;font-size:1.05rem}
+  .feedback .ok{color:var(--good)} .feedback .no{color:var(--bad)}
+  .quote{font-style:italic;color:var(--soft);font-size:.92rem}
+  .src{font-size:.8rem;margin-top:6px}
+  .src a{color:var(--lake)}
+  .score{font-size:3rem;font-weight:800;color:var(--pine);text-align:center;margin:4px 0}
+  .msg{text-align:center;font-size:1.1rem;line-height:1.45;margin:0 0 6px}
+  .shared{text-align:center;font-size:.85rem;color:var(--good);min-height:1.2em;margin:6px 0 0}
+  .links{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+  .links a{flex:1 1 200px;background:#fff;border:2px solid var(--pine);color:var(--pine);text-decoration:none;font-weight:600;padding:12px;border-radius:12px;font-size:.95rem;text-align:center}
+  footer{text-align:center;padding:18px 16px 28px;color:var(--soft);font-size:.8rem;line-height:1.5}
+  footer a{color:var(--lake);text-decoration:none}
+  [hidden]{display:none !important}
+</style>
+</head>
+<body>
+<header>
+  <h1>Yooper Trivia</h1>
+  <p>How well do you know da U.P., eh? By 2 Broke Yoopers</p>
+</header>
+<div class="wrap">
+
+  <section id="start">
+    <div class="hero">
+      <h2>Ten quick questions about the U.P.</h2>
+      <p>Towns, pasties, Lake Superior, wildlife, sports and sayings. Every round picks ten new questions from our big pile, so please come back and play again!</p>
+    </div>
+    <div class="card">
+      <p style="margin:0;line-height:1.45">Tap an answer and we'll tell you if you got it, with the fact and where we found it. No sign-up, nothing to install, and it works without internet once it has loaded.</p>
+      <button class="big" id="go">Start a round</button>
+    </div>
+  </section>
+
+  <section id="play" hidden>
+    <div class="bar"><span id="count">Question 1 of 10</span><span id="tally">Score: 0</span></div>
+    <div class="progress"><div id="prog"></div></div>
+    <div class="card">
+      <p class="q" id="question"></p>
+      <div class="choices" id="choices"></div>
+      <div class="feedback" id="feedback" hidden aria-live="polite"></div>
+      <button class="big" id="next" hidden>Next question</button>
+    </div>
+  </section>
+
+  <section id="end" hidden>
+    <div class="card">
+      <p class="msg" style="margin-top:0">Your score</p>
+      <p class="score" id="final">0 / 10</p>
+      <p class="msg" id="verdict"></p>
+      <button class="big" id="share">Share your score</button>
+      <p class="shared" id="shared" aria-live="polite"></p>
+      <button class="big alt" id="again">Play another round</button>
+    </div>
+    <div class="card">
+      <p style="margin:0;line-height:1.45">Thank you so much for playing! If you had fun, please come say hi at our store, or learn to talk like a real Yooper.</p>
+      <div class="links">
+        <a href="https://2brokeyoopers.com" target="_blank" rel="noopener">Visit our store at 2brokeyoopers.com</a>
+        <a href="../yooper-dictionary/">Open the Yooper Dictionary</a>
+      </div>
+    </div>
+  </section>
+
+</div>
+<footer>
+  <a href="../">More free tools</a> · Facts checked against the sources listed with each answer.<br>
+  <p style="margin:8px 0 0">From 2 Broke Yoopers — affordable products built for fun, function, and honest value.</p>
+</footer>
+<script src="questions.js"></script>
+<script>
+var ROUND = 10;
+var PAGE_URL = "https://2brokeyoopers.github.io/tools/yooper-trivia/";
+var $ = function (id) { return document.getElementById(id); };
+var round = [], at = 0, score = 0;
+
+function shuffle(list) {
+  var a = list.slice();
+  for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; }
+  return a;
+}
+function show(id) { ["start", "play", "end"].forEach(function (s) { $(s).hidden = s !== id; }); window.scrollTo(0, 0); }
+function sourceName(url) { return decodeURIComponent(url.split("/wiki/")[1] || url).replace(/_/g, " "); }
+
+function startRound() {
+  round = shuffle(QUESTIONS).slice(0, ROUND);
+  at = 0; score = 0;
+  show("play");
+  ask();
+}
+function ask() {
+  var item = round[at];
+  $("count").textContent = "Question " + (at + 1) + " of " + round.length;
+  $("tally").textContent = "Score: " + score;
+  $("prog").style.width = (at / round.length * 100) + "%";
+  $("question").textContent = item.q;
+  $("feedback").hidden = true;
+  $("next").hidden = true;
+  var box = $("choices");
+  box.innerHTML = "";
+  shuffle(item.choices).forEach(function (text) {
+    var b = document.createElement("button");
+    b.className = "choice";
+    b.textContent = text;
+    b.addEventListener("click", function () { answer(b, text); });
+    box.appendChild(b);
+  });
+  box.firstChild.focus({ preventScroll: true });
+}
+function answer(button, text) {
+  var item = round[at];
+  var right = text === item.answer;
+  if (right) score++;
+  Array.prototype.forEach.call($("choices").children, function (b) {
+    b.disabled = true;
+    if (b.textContent === item.answer) b.classList.add("right");
+  });
+  if (!right) button.classList.add("wrong");
+  var fb = $("feedback");
+  fb.innerHTML = "";
+  var head = document.createElement("strong");
+  head.className = right ? "ok" : "no";
+  head.textContent = right ? "Right you are! Nice job." : "Not quite, but thank you for trying! The answer is " + item.answer + ".";
+  var quote = document.createElement("div");
+  quote.className = "quote";
+  quote.textContent = "From the source: “" + item.quote.join(" … ") + "”";
+  var src = document.createElement("div");
+  src.className = "src";
+  var a = document.createElement("a");
+  a.href = item.src; a.target = "_blank"; a.rel = "noopener";
+  a.textContent = "Source: Wikipedia, " + sourceName(item.src);
+  src.appendChild(a);
+  fb.appendChild(head); fb.appendChild(quote); fb.appendChild(src);
+  fb.hidden = false;
+  $("tally").textContent = "Score: " + score;
+  $("next").textContent = at + 1 < round.length ? "Next question" : "See my score";
+  $("next").hidden = false;
+  $("next").focus({ preventScroll: true });
+}
+function verdict(n, total) {
+  if (n === total) return "Holy wah! A perfect round. You're a true Yooper, eh!";
+  if (n >= total * 0.8) return "Great job! You know da U.P. like the inside of your choppers.";
+  if (n >= total * 0.5) return "Nice work! A few more pasties and you'll be a pro.";
+  return "Thank you for playing! Every Yooper started somewhere. Please try another round, eh.";
+}
+function finish() {
+  $("prog").style.width = "100%";
+  $("final").textContent = score + " / " + round.length;
+  $("verdict").textContent = verdict(score, round.length);
+  $("shared").textContent = "";
+  show("end");
+}
+function shareText() {
+  return "I scored " + score + " out of " + round.length + " on Yooper Trivia from 2 Broke Yoopers! Can you beat me, eh? " + PAGE_URL;
+}
+function share() {
+  var text = shareText();
+  if (navigator.share) {
+    navigator.share({ title: "Yooper Trivia", text: text }).catch(function () {});
+    return;
+  }
+  var done = function () { $("shared").textContent = "Copied! Please paste it anywhere you like. Thank you for sharing!"; };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(done, function () { window.prompt("Copy your score:", text); });
+  } else {
+    window.prompt("Copy your score:", text);
+  }
+}
+
+$("go").addEventListener("click", startRound);
+$("again").addEventListener("click", startRound);
+$("next").addEventListener("click", function () { at++; if (at < round.length) ask(); else finish(); });
+$("share").addEventListener("click", share);
+if ("serviceWorker" in navigator) { window.addEventListener("load", function () { navigator.serviceWorker.register("sw.js").catch(function () {}); }); }
+</script>
+</body>
+</html>

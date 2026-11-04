@@ -1,0 +1,13 @@
+{
+  "name": "Yooper Trivia",
+  "short_name": "Yooper Trivia",
+  "description": "Ten quick questions about the U.P. of Michigan, by 2 Broke Yoopers.",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#f6efe2",
+  "theme_color": "#1c4a2b",
+  "icons": [
+    { "src": "../yooper-dictionary/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "../yooper-dictionary/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}
