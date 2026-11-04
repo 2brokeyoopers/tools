@@ -9,9 +9,10 @@ const http = require("http");
 const { chromium } = require("playwright");
 
 const TYPES = { ".html": "text/html; charset=utf-8", ".js": "text/javascript; charset=utf-8", ".png": "image/png", ".webmanifest": "application/manifest+json" };
-function serve(root) {
+function serve(root, state) {
   return new Promise((resolve) => {
     const server = http.createServer((req, res) => {
+      if (state && state.hang) return; // weak signal: the request never gets an answer
       let p = decodeURIComponent(new URL(req.url, "http://x").pathname);
       if (p.endsWith("/")) p += "index.html";
       const file = path.join(root, p);
@@ -29,7 +30,8 @@ async function play(root) {
   const QUESTIONS = JSON.parse(JSON.stringify(require(path.join(root, "yooper-trivia", "questions.js"))));
   delete require.cache[require.resolve(path.join(root, "yooper-trivia", "questions.js"))];
   const answerOf = new Map(QUESTIONS.map((q) => [q.q, q.answer]));
-  const server = await serve(root);
+  const state = { hang: false };
+  const server = await serve(root, state);
   const url = "http://127.0.0.1:" + server.address().port + "/yooper-trivia/";
   const browser = await chromium.launch();
   const context = await browser.newContext({ viewport: { width: 375, height: 740 }, isMobile: true, hasTouch: true });
@@ -86,11 +88,26 @@ async function play(root) {
     await page.evaluate(() => navigator.serviceWorker.ready);
     await page.reload();
     await page.waitForFunction(() => !!navigator.serviceWorker.controller, null, { timeout: 10000 });
+    // Weak signal at camp: the network never answers. The saved copy must show within a few seconds.
+    state.hang = true;
+    let weakOk = false;
+    // A separate tab, so a load that never finishes cannot spoil the offline check below.
+    const weak = await context.newPage();
+    try {
+      await weak.goto(url, { waitUntil: "domcontentloaded", timeout: 8000 });
+      await weak.waitForSelector("#go", { state: "visible", timeout: 2000 });
+      weakOk = true;
+    } catch (e) { weakOk = false; }
+    await Promise.race([weak.close().catch(() => {}), new Promise((r) => setTimeout(r, 3000))]);
+    ok("the quiz opens within a few seconds on a signal too weak to load anything", weakOk);
     // Shut the web server down as well as switching the browser offline. Older Chromium lets a service worker
     // reach the network even when the browser is offline, so only a stopped server proves the saved copy is used.
     await context.setOffline(true);
+    state.hang = false;
     server.closeAllConnections();
-    await new Promise((r) => server.close(r));
+    // A request left hanging by the weak signal test must not keep the server open forever.
+    await Promise.race([new Promise((r) => server.close(r)), new Promise((r) => setTimeout(r, 2000))]);
+    server.closeAllConnections();
     let offlineOk = false;
     try {
       await page.reload();
@@ -119,7 +136,7 @@ function brokenCopy() {
   // Also share a made-up score of 8 instead of the real one.
   fs.writeFileSync(page, fs.readFileSync(page, "utf8").replace("var ROUND = 10;", "var ROUND = 9;").replace('return "I scored " + score + "/"', 'return "I scored " + 8 + "/"'));
   const sw = path.join(tmp, "yooper-trivia", "sw.js");
-  fs.writeFileSync(sw, fs.readFileSync(sw, "utf8").replace("'questions.js', ", "").replace("caches.open(CACHE).then(c => c.put(e.request, copy))", "Promise.resolve()"));
+  fs.writeFileSync(sw, fs.readFileSync(sw, "utf8").replace("'questions.js', ", "").replace("caches.open(CACHE).then(c => c.put(e.request, copy))", "Promise.resolve()").replace("setTimeout(resolve, 3000)", "setTimeout(resolve, 600000)"));
   return tmp;
 }
 
@@ -127,7 +144,7 @@ function brokenCopy() {
   let pass = 0, fail = 0;
   if (process.argv.includes("--selftest")) {
     const results = new Map(await play(brokenCopy()));
-    for (const name of ["a round asks exactly 10 questions", "the share button shares the real final score and the quiz link", "the quiz still works with the internet switched off"]) {
+    for (const name of ["a round asks exactly 10 questions", "the share button shares the real final score and the quiz link", "the quiz still works with the internet switched off", "the quiz opens within a few seconds on a signal too weak to load anything"]) {
       if (results.get(name) === false) { pass++; console.log("PASS selftest caught: " + name); }
       else { fail++; console.log("FAIL selftest: this check did not catch the broken copy: " + name); }
     }

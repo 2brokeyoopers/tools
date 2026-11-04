@@ -7,6 +7,8 @@ const fs = require("fs");
 const runs = [
   ["gift list and matching", "test_gifts.js", []],
   ["gift list selftest (shop front, dead link, empty result)", "test_gifts.js", ["--selftest"]],
+  ["outside check of 2026-11-04 (front page link, moved links, kid results, close picks)", "test_audit.js", []],
+  ["outside check selftest", "test_audit.js", ["--selftest"]],
   ["every link opened on the internet", "test_links_live.js", []],
   ["dead link selftest", "test_links_live.js", ["--selftest"]],
   ["page on a phone, online and offline", "test_page.js", []],

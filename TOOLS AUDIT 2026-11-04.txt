@@ -1,0 +1,66 @@
+TOOLS AUDIT, 2026-11-04
+Outside check of Yooper Trivia and the Yooper Gift Finder. The checker did not build either tool.
+Every mistake below got a test that failed first, then the fix made it pass.
+Tests: yooper-trivia\tests\test_audit.js, gift-finder\tests\test_audit.js, and a new weak signal check in
+yooper-trivia\tests\test_play.js. Both double-click checks now run them. Pass is every line FAIL=0.
+
+YOOPER TRIVIA: WHAT WAS WRONG AND WHAT WAS FIXED
+1. Soo Locks year had two right answers. The question asked for "the first Soo Locks" and offered 1798, but the
+   same source page says the first lock on the St. Marys River was built on the Canadian side in 1798.
+   Fixed: the question now asks for the first U.S. Soo Locks, and 1798 is replaced with 1825.
+2. Pine Mountain was called the largest ski jump in the United States. The source says "Excluding ski flying hills".
+   Copper Peak near Ironwood is bigger. Fixed: the question and quote keep "not counting ski flying hills".
+3. "Almost half of the Finnish immigrants to the U.S. settled in the U.P." The Wikipedia sentence has no citation, and
+   Wikipedia's own Finnish Americans page counts more Finnish Americans in Minnesota than in all of Michigan.
+   Fixed: replaced with a cited fact. The western U.P. has the only U.S. counties where Finnish is the biggest ancestry.
+4. The Ironwood question says 52-foot, but the quote shown to players did not include the height.
+   Fixed: the quote now carries "a 52 ft (15.8 m) fiberglass statue".
+5. The pasty question said "in the 1800s", which the quote did not show. Fixed: "19th century", with that part quoted.
+6. "About how long is the Mackinac Bridge?" with the answer "4.995 miles" read oddly. Fixed: "Just under 5 miles (4.995)".
+7. A wrong answer showed "The answer is About 48 feet." with a capital letter mid-sentence.
+   Fixed: "The right answer: About 48 feet".
+8. Weak signal: the page waited for the network with no time limit, so one bar at camp meant a blank page.
+   Fixed: after 3 seconds the saved copy is used, the same way the gift finder already worked.
+   Shown failing on the old file (PASS=14 FAIL=1), passing on the new one (PASS=15 FAIL=0).
+New general rule in the test: every number in a question must appear in its quote.
+
+YOOPER TRIVIA: CHECKED AND FOUND GOOD
+- All 83 source pages were fetched again. Every quote is on its page word for word (verify_sources_online.js).
+- Every remaining answer was read against its page. No other wrong, outdated or doubled answer was found.
+- Phone at 375 px wide: no sideways scrolling on the start, question and end screens.
+- Share button gives the real score and the quiz link. Offline works once the page has loaded.
+- Slogan is the last line of the page.
+
+GIFT FINDER: WHAT WAS WRONG AND WHAT WAS FIXED
+1. The Ya Ain't Truly a Yooper button opened the 2brokeyoopers.com front page. Fixed: it opens the Apparel and Merch
+   section, where the hoodie is, and the card now says Hoodie and "Find it under Yooper Pride".
+2. That card showed "From $24", a price no store page confirmed. Fixed: "See price in our shop", like the other shirts.
+3. Two Zazzle links (the I'm Onto You tumbler and the I Can Smell 'Em hat) only worked by redirect. The products
+   moved to new addresses. Fixed: both links and tests\confirmed_links.txt use the new addresses.
+4. A kid could be shown the meal plan, the back-to-sleep guide, the kitchen reset and a $34 insulated tumbler.
+   Fixed: those four are never shown for a kid.
+5. Close picks were filled with whatever was cheapest, so 24 answers showed the free kitchen printable to someone who
+   asked for fishing or puzzles. Fixed: filler close picks are now general Yooper gifts (pride or a laugh).
+6. gift-finder\CHECK RESULTS.txt was not in .gitignore, so a test run left a stray file. Fixed.
+
+GIFT FINDER: CHECKED AND FOUND GOOD
+- All 7 Payhip links open the right product, sold by 2 Broke Yoopers, at the price shown ($4.00, $4.00, $4.00,
+  $4.00, $2.99, $1.99, free).
+- All 4 Zazzle links open the right product. The price before sale matches ($17.80, $17.80, $34.35, $16.50).
+- All 7 Amazon links open the right book title.
+- All 12,264 answer combinations give 3 to 8 ideas. None is empty.
+- Phone at 375 px wide: no sideways scrolling. The share button, offline mode and slogan line all pass their checks.
+
+COULD NOT CHECK
+- Amazon prices for 6 of the 7 books. Amazon showed the title but not the price to the robot.
+  Only the Deer Camp Logbook price ($5.50) was confirmed.
+- TeePublic, Redbubble and Etsy refuse robots (HTTP 403). That means no shirt, sticker or Etsy page could be opened.
+  These buttons still go to the right section of 2brokeyoopers.com. The real T-shirt page is
+  https://www.teepublic.com/t-shirt/93607501-ya-aint-truly-a-yooper-till-up-in-da-woods-white-i (from the site's own
+  Buy on TeePublic button). It needs a person to open it once and add it to tests\confirmed_links.txt.
+- The Amazon pages for the Fishing Log, the Outdoorsman's 3-in-1 and The Count of Souls gave server error 500.
+  They stay pointed at the Books section of 2brokeyoopers.com.
+- Sharing was tested with the copy route in Chromium. The phone share sheet itself needs a real phone.
+- The trivia share text does not name 2 Broke Yoopers. Gemini approved that wording, so it was left alone.
+- Small text links ("Free tools", "More free tools") are under 32 px tall on a phone. They work, but are a small tap.
+- Store note: the Payhip title reads "Back-to Sleep Guide" with a missing hyphen. Our page spells it right.
