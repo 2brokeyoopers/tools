@@ -21,13 +21,12 @@ for (const w of sorted) {
   const say = w.say ? ` <span class="say">(${esc(w.say)})</span>` : '';
   const alt = w.alt && w.alt.length ? `<div class="alt">Also: ${w.alt.map(esc).join(', ')}</div>` : '';
   body += `<div class="entry"><div class="head"><b class="term">${esc(w.term)}</b>${say} <i class="pos">${esc(w.pos || '')}</i></div>` +
-    `<div class="def">${esc(w.def)}</div><div class="ex">“${esc(w.ex)}”</div>${alt}` +
-    `<div class="src">Checked at: ${esc(w.source.name)}</div></div>`;
+    `<div class="def">${esc(w.def)}</div><div class="ex">“${esc(w.ex)}”</div>${alt}</div>`;
 }
 
 const html = `<!doctype html><html><head><meta charset="utf-8"><style>
 @page { size: 8.5in 11in; margin: 0.6in 0.6in 0.7in; }
-body { font-family: Lora, Georgia, serif; color: #1d1d1d; font-size: 10.5pt; line-height: 1.32; margin: 0; }
+body { font-family: Lora, Georgia, serif; color: #1d1d1d; font-size: 11.5pt; line-height: 1.32; margin: 0; }
 .cover { height: 9.6in; display: flex; flex-direction: column; justify-content: center; text-align: center; page-break-after: always; border: 3px double #2f5d3a; padding: 0.5in; box-sizing: border-box; }
 .cover .kicker { letter-spacing: 0.25em; text-transform: uppercase; color: #2f5d3a; font-size: 11pt; }
 .cover h1 { font-size: 48pt; margin: 0.15in 0 0.1in; line-height: 1.05; }
@@ -40,7 +39,7 @@ body { font-family: Lora, Georgia, serif; color: #1d1d1d; font-size: 10.5pt; lin
 .cols { column-count: 2; column-gap: 0.35in; column-rule: 1px solid #c9d6cc; }
 h2.letter { column-span: none; font-size: 22pt; color: #2f5d3a; border-bottom: 2px solid #2f5d3a; margin: 0.12in 0 0.06in; break-after: avoid; }
 .entry { break-inside: avoid; margin: 0 0 0.11in; }
-.term { font-size: 12pt; }
+.term { font-size: 13pt; }
 .say { color: #555; } .pos { color: #2f5d3a; }
 .ex { font-style: italic; color: #333; }
 .alt { font-size: 9pt; color: #444; }
@@ -59,7 +58,7 @@ h2.letter { column-span: none; font-size: 22pt; color: #2f5d3a; border-bottom: 2
 <section class="how">
   <h2>How to use this dictionary</h2>
   <p>Words are in A to Z order. Each one gives the word, how to say it when that helps, a plain meaning and a short example. "Also" lists other spellings you might see.</p>
-  <p>Every word was checked against a real web page that ties it to the U.P. The page we used is named in small print under each word.</p>
+  <p>Every word was checked against a real web page that ties it to the U.P. The free online version names the page for every word.</p>
   <p>Want the free, searchable version for your phone? Visit 2brokeyoopers.github.io/tools/yooper-dictionary and look up any word in a second, even if you spell it like a troll.</p>
   <p>Know a word we missed? Thank you for helping! Please send it to 2brokeyoopers@gmail.com.</p>
 </section>

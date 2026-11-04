@@ -37,6 +37,9 @@ test('the word count printed on the cover is the real count', () => {
 test('nothing marked UNVERIFIED is printed', () => {
   assert.ok(!/UNVERIFIED/i.test(text));
 });
+test('no source notes clutter the printable', () => {
+  assert.ok(!/Checked at:/.test(text), 'Checked at: lines found');
+});
 test('U.P. always has periods', () => {
   assert.ok(!/\bUP\b(?! in Da)/.test(raw.replace(/Live it UP/g, '')), 'bare UP found');
 });
