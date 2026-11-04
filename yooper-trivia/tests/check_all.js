@@ -9,6 +9,8 @@ const runs = [
   ["questions selftest", "test_questions.js", ["--selftest"]],
   ["page promises", "test_page.js", []],
   ["page promises selftest", "test_page.js", ["--selftest"]],
+  ["outside check of 2026-11-04 (facts, wording, weak signal)", "test_audit.js", []],
+  ["outside check selftest", "test_audit.js", ["--selftest"]],
   ["playing a round at phone size, and offline", "test_play.js", []],
   ["playing a round selftest", "test_play.js", ["--selftest"]],
 ];

@@ -38,15 +38,15 @@
     { id: "meal-plan", kind: "Printable", name: "Easy for the Exasperated: Simple Meal Plan", price: 2.99, priceText: "$2.99",
       store: "Payhip", url: "https://payhip.com/b/HZEL2",
       blurb: "Five weekday dinners, three sizes, zero decisions. A kind gift for anyone who is tired of asking what's for supper.",
-      likes: ["home", "humor"], who: ["mom", "friend", "self"] },
+      likes: ["home", "humor"], who: ["mom", "friend", "self"], notFor: ["kid"] },
     { id: "sleep-guide", kind: "Printable", name: "Easy for the Exasperated: Simple Back-to-Sleep Guide", price: 1.99, priceText: "$1.99",
       store: "Payhip", url: "https://payhip.com/b/4peIG",
       blurb: "A short guide for the 3 a.m. ceiling stare. Small price, big yawn.",
-      likes: ["home"], who: ["mom", "friend", "self"] },
+      likes: ["home"], who: ["mom", "friend", "self"], notFor: ["kid"] },
     { id: "kitchen-reset", kind: "Printable", name: "Easy for the Exasperated: Simple Kitchen Reset", price: 0, priceText: "Free (pay what you want)",
       store: "Payhip", url: "https://payhip.com/b/gdQXM",
       blurb: "A free printable for a calmer kitchen. Pay what you want, and zero is just fine.",
-      likes: ["home"], who: ["mom", "self", "friend"] },
+      likes: ["home"], who: ["mom", "self", "friend"], notFor: ["kid"] },
 
     // ---- Books (paperbacks on Amazon) ----
     { id: "deer-logbook", kind: "Book", name: "U.P. Deer Camp Logbook", price: 5.5, priceText: "$5.50 paperback",
@@ -103,18 +103,18 @@
       blurb: "A two-tone mug for the person everyone (and everything) seems to find. Coffee not included, abductions not guaranteed.",
       likes: ["humor"], who: ["friend", "dad", "self"] },
     { id: "onto-you-tumbler", kind: "Mug", name: "I'm Onto You Insulated Tumbler", price: 34.35, priceText: "$34.35 before any sale",
-      store: "Zazzle", url: "https://www.zazzle.com/im_onto_you_pointing_finger_playfully_fun_insulated_tumbler-256785691398492249",
+      store: "Zazzle", url: "https://www.zazzle.com/im_onto_you_funny_suspicious_pointing_finger_insulated_tumbler-256785691398492249",
       blurb: "An insulated tumbler with a pointing finger, for the one who always knows who ate the last pasty.",
-      likes: ["humor"], who: ["mom", "friend"] },
+      likes: ["humor"], who: ["mom", "friend"], notFor: ["kid"] },
     { id: "smell-em-hat", kind: "Hat", name: "I Can Smell 'Em! Morel Hunting Dog Trucker Hat", price: 16.5, priceText: "$16.50 before any sale",
-      store: "Zazzle", url: "https://www.zazzle.com/happy_dog_smelling_morel_mushrooms_nature_love_trucker_hat-256130430391358261",
+      store: "Zazzle", url: "https://www.zazzle.com/i_can_smell_em_morel_mushroom_hunting_dog_trucker_hat-256130430391358261",
       blurb: "A happy dog on the trail of morels. For the mushroom hunter who will not tell you where the spot is.",
       likes: ["cabin", "humor", "hunting"], who: ["dad", "friend", "self"] },
 
     // ---- Shirts and stickers (shown on our own website) ----
-    { id: "truly-yooper-tee", kind: "Shirt", name: "Ya Ain't Truly a Yooper T-Shirt", price: 24, priceText: "From $24",
-      store: "2brokeyoopers.com", url: "https://2brokeyoopers.com/",
-      blurb: "Our best seller. White pines and the line every Yooper knows. 18 colors, sizes S to 5XL. It is the first shirt under Shop Our Best Sellers.",
+    { id: "truly-yooper-tee", kind: "Shirt", name: "Ya Ain't Truly a Yooper Hoodie", price: null, priceText: "See price in our shop",
+      store: "2brokeyoopers.com", url: "https://2brokeyoopers.com/#merch",
+      blurb: "Our best-selling design. White pines and the line every Yooper knows. Find it under Yooper Pride.",
       likes: ["pride", "cabin", "hunting"], who: ["dad", "mom", "friend", "away", "self"] },
     { id: "fishing-hoodie", kind: "Shirt", name: "Obsessed with Fishing Hoodie", price: null, priceText: "See price in our shop",
       store: "2brokeyoopers.com", url: "https://2brokeyoopers.com/#merch",
@@ -160,8 +160,10 @@
     const picks = list.filter((g) => fitsBudget(g, answers.budget) && g.likes.some((l) => likes.includes(l))).sort(order).slice(0, MAX_RESULTS);
     const nearby = [];
     if (picks.length < MIN_RESULTS) {
-      // Close picks: something they like comes first, even a little over budget, then whatever fits the budget.
-      const rest = list.filter((g) => !picks.includes(g))
+      // Close picks: something they like comes first, even a little over budget. After that only general
+      // Yooper gifts (pride or a laugh), never a kitchen printable for someone who asked for fishing.
+      const general = (g) => g.likes.some((l) => l === "pride" || l === "humor");
+      const rest = list.filter((g) => !picks.includes(g) && (g.likes.some((l) => likes.includes(l)) || general(g)))
         .sort((a, b) => score(b) - score(a) || fitsBudget(b, answers.budget) - fitsBudget(a, answers.budget) || (a.price ?? 999) - (b.price ?? 999));
       nearby.push(...rest.slice(0, MIN_RESULTS - picks.length));
     }

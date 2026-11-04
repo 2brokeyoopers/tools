@@ -24,6 +24,9 @@ THE CHECKS (each one was seen failing on a broken input before it passed)
   3 to 8 ideas, matches always fit the budget and a like, no true crime book shown for a kid, close picks share a like
   when one exists, price lines agree with prices. --selftest feeds a shop front link, a dead link, an empty gift list,
   a too-short list, a wrong price and three broken matchers. All 10 are caught, and 9 shop front addresses are refused.
+- tests/test_audit.js: the outside check of 2026-11-04 (see TOOLS AUDIT 2026-11-04.txt at the top of the repo).
+  No front page link, no moved Zazzle address, no guessed shirt price, no grown-up printables for a kid, and close
+  picks are general Yooper gifts, never a kitchen printable for someone who asked for fishing.
 - tests/test_links_live.js: opens every link. A 404, a 410, a "page not found" page, or a missing section on
   2brokeyoopers.com fails. A store that turns a robot away is listed to open by hand, not failed.
   --selftest serves dead pages on this computer. All 5 are caught.

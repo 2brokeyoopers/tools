@@ -24,6 +24,9 @@ WHAT IS IN THIS FOLDER
   a broken copy (nine questions per round, questions left out of the offline files) and they must fail.
 - tests/verify_sources_online.js: reads every source page on the internet and checks each quote is on it word for word.
   It needs the internet, so it is not in the double-click check. Run it after changing any question.
+- tests/test_audit.js: the outside check of 2026-11-04 (see TOOLS AUDIT 2026-11-04.txt at the top of the repo).
+  Every number in a question must be in its quote, no Soo Locks 1798 trap, Pine Mountain keeps "not counting ski
+  flying hills", no uncited Finnish claim, no "About 4.995 miles", and the offline copy wins after 3 seconds of weak signal.
 - tests/check_all.js: runs every offline check and writes CHECK RESULTS.txt.
 
 HOW A QUESTION IS CHECKED
@@ -92,7 +95,7 @@ SOURCES (each page read on 2026-11-04; the number is how many questions use it)
 - https://en.wikipedia.org/wiki/Michigan_Technological_University  (1)
 - https://en.wikipedia.org/wiki/Mount_Arvon  (2)
 - https://en.wikipedia.org/wiki/Newberry,_Michigan  (1)
-- https://en.wikipedia.org/wiki/North-Central_American_English  (5)
+- https://en.wikipedia.org/wiki/North-Central_American_English  (4)
 - https://en.wikipedia.org/wiki/Northern_Michigan_University  (1)
 - https://en.wikipedia.org/wiki/Paradise,_Michigan  (1)
 - https://en.wikipedia.org/wiki/Pasty  (4)
@@ -113,6 +116,6 @@ SOURCES (each page read on 2026-11-04; the number is how many questions use it)
 - https://en.wikipedia.org/wiki/Toledo_War  (1)
 - https://en.wikipedia.org/wiki/Tom_Izzo  (1)
 - https://en.wikipedia.org/wiki/Trenary,_Michigan  (1)
-- https://en.wikipedia.org/wiki/Upper_Peninsula_of_Michigan  (5)
+- https://en.wikipedia.org/wiki/Upper_Peninsula_of_Michigan  (6)
 - https://en.wikipedia.org/wiki/Whitefish_Point  (2)
 - https://en.wikipedia.org/wiki/Wolves_and_moose_on_Isle_Royale  (1)

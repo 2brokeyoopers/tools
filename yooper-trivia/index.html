@@ -156,7 +156,7 @@ function answer(button, text) {
   fb.innerHTML = "";
   var head = document.createElement("strong");
   head.className = right ? "ok" : "no";
-  head.textContent = right ? "Right you are! Nice job." : "Not quite, but thank you for trying! The answer is " + item.answer + ".";
+  head.textContent = right ? "Right you are! Nice job." : "Not quite, but thank you for trying! The right answer: " + item.answer;
   var quote = document.createElement("div");
   quote.className = "quote";
   quote.textContent = "From the source: “" + item.quote.join(" … ") + "”";

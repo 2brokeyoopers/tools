@@ -20,7 +20,6 @@ https://www.amazon.com/dp/B0GS5V1BDX | 2026-11-04 | opened with WebFetch, read t
 https://2brokeyoopers.com/#books | 2026-11-04 | downloaded the live site, HTTP 200, and found the section books on it
 https://www.zazzle.com/wisconsin_yooper_grade_eh_cheese_funny_cow_two_tone_coffee_mug-256944135514556276 | 2026-11-04 | opened with WebFetch, read the product title, price and the 2BrokeYoopers store name
 https://www.zazzle.com/aliens_always_have_to_come_to_me_funny_ufo_two_tone_coffee_mug-256948969999876979 | 2026-11-04 | opened with WebFetch, read the product title, price and the 2BrokeYoopers store name
-https://www.zazzle.com/im_onto_you_pointing_finger_playfully_fun_insulated_tumbler-256785691398492249 | 2026-11-04 | opened with WebFetch, read the product title, price and the 2BrokeYoopers store name
-https://www.zazzle.com/happy_dog_smelling_morel_mushrooms_nature_love_trucker_hat-256130430391358261 | 2026-11-04 | opened with WebFetch, read the product title, price and the 2BrokeYoopers store name
-https://2brokeyoopers.com/ | 2026-11-04 | downloaded the live home page, HTTP 200, and found the product on it
+https://www.zazzle.com/im_onto_you_funny_suspicious_pointing_finger_insulated_tumbler-256785691398492249 | 2026-11-04 (address updated by the outside check; the old one redirected here) | opened with WebFetch, read the product title, price and the 2BrokeYoopers store name
+https://www.zazzle.com/i_can_smell_em_morel_mushroom_hunting_dog_trucker_hat-256130430391358261 | 2026-11-04 (address updated by the outside check; the old one redirected here) | opened with WebFetch, read the product title, price and the 2BrokeYoopers store name
 https://2brokeyoopers.com/#merch | 2026-11-04 | downloaded the live site, HTTP 200, and found the section merch on it
