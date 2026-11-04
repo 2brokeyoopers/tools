@@ -85,7 +85,11 @@ async function play(root) {
     await page.evaluate(() => navigator.serviceWorker.ready);
     await page.reload();
     await page.waitForFunction(() => !!navigator.serviceWorker.controller, null, { timeout: 10000 });
+    // Shut the web server down as well as switching the browser offline. Older Chromium lets a service worker
+    // reach the network even when the browser is offline, so only a stopped server proves the saved copy is used.
     await context.setOffline(true);
+    server.closeAllConnections();
+    await new Promise((r) => server.close(r));
     let offlineOk = false;
     try {
       await page.reload();
@@ -93,12 +97,11 @@ async function play(root) {
       const q = await page.textContent("#question", { timeout: 5000 });
       offlineOk = answerOf.has(q);
     } catch (e) { offlineOk = false; }
-    await context.setOffline(false);
     ok("the quiz still works with the internet switched off", offlineOk);
     ok("no errors in the page", errors.length === 0);
   } finally {
     await browser.close();
-    server.close();
+    if (server.listening) { server.closeAllConnections(); server.close(); }
   }
   return out;
 }
