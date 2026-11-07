@@ -87,7 +87,7 @@ Card: dictionary, in company plan 6.26\2BY_CURRENT_STATE_READ_FIRST.txt
 [ ] 2. Shirts and other print-on-demand items from the funniest words. Gemini: Yooper slang shirts sell well in the U.P. Goes through the normal design rules and Mike's approval.
 [ ] 3. Facebook post on the 2BY Page asking fans for more words, linking the page. Gemini: free reach and new words. New kind of post, so Mike sees it first (rulebook overrides Gemini's "no approval").
 [ ] 4. Button on 2brokeyoopers.com linking the dictionary. Gemini: steady free traffic. Mike clicks Publish in Carrd (website card rule).
-[ ] 5. Sell the printable on its own on Payhip and Etsy at $3.99 (Gemini's price). Gemini ranked it last because the web page is free. Mike approves the listing and price.
+[x] 5. Paid printable LIVE 2026-11-07 at $1.99 (Gemini's new price): etsy.com/listing/4612158542 and payhip.com/b/EQ4GA. 7 pages, 152 audited words, Gemini Pro A, PUBLISH: YES. Built by node yooper-dictionary/make_printable.js, checked by node --test yooper-dictionary/tests/printable.test.js. The PDF is kept OUT of this public repo; the copy for sale is C:\Users\mjjoh\OneDrive\Desktop\company plan 6.26\projects\Yooper Dictionary. Was: sell the printable on its own at $3.99. Gemini ranked it last because the web page is free. Mike approves the listing and price.
 Later, not ranked: a suggest-a-word form on the page, real recordings for the Hear it button.
 
 WHAT IS IN THE DICTIONARY FOLDER
