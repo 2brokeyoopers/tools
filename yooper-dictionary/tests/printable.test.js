@@ -46,7 +46,38 @@ test('U.P. always has periods', () => {
 test('the last words of the PDF are the 2 Broke Yoopers line', () => {
   assert.ok(text.endsWith(flat(SLOGAN)), 'ends with: ' + text.slice(-120));
 });
+test('the sources page credits every source used', () => {
+  const t = flat(raw).replace(/[ -]/g, '');
+  const missing = [...new Set(WORDS.map(w => w.source.name))].filter(n => !t.includes(flat(n).replace(/[ -]/g, '')));
+  assert.deepStrictEqual(missing, []);
+});
+test('every fun fact is printed with its source', () => {
+  const E = require('../printable/extras.js');
+  const t = flat(raw).replace(/[ -]/g, '');
+  const missing = E.facts.filter(f => !t.includes(flat(f.text).replace(/[ -]/g, '')) || !t.includes(flat(f.source).replace(/[ -]/g, '')));
+  assert.deepStrictEqual(missing.map(f => f.source), []);
+});
+test('the word search lists all 15 words', () => {
+  const E = require('../printable/extras.js');
+  assert.strictEqual(E.wordSearch.words.length, 15);
+  assert.deepStrictEqual(E.wordSearch.words.filter(w => !text.includes(w)), []);
+});
 test('at least a cover page plus word pages, and not over 20 pages', () => {
   const n = +((info.match(/Pages:\s+(\d+)/) || [])[1] || 0);
-  assert.ok(n >= 3 && n <= 20, 'pages: ' + n);
+  assert.ok(n >= 5 && n <= 8, 'pages: ' + n);
+});
+test('every answer key position really spells its word in the printed grid', () => {
+  const E = require('../printable/extras.js');
+  const n = E.wordSearch.size;
+  const rows = raw.split('\n').map(l => l.trim()).filter(l => new RegExp('^([A-Z] ){' + (n - 1) + '}[A-Z]$').test(l)).map(l => l.split(' '));
+  assert.strictEqual(rows.length, n, 'grid rows found: ' + rows.length);
+  const key = raw.split('\n').join(' ').split('').reverse().join('');
+  for (const w of E.wordSearch.words) {
+    const m = key.match(new RegExp(w + ' row (\\d+), column (\\d+), (across|down|slant down|slant up)'));
+    assert.ok(m, 'no key for ' + w);
+    const [dr, dc] = { across: [0, 1], down: [1, 0], 'slant down': [1, 1], 'slant up': [-1, 1] }[m[3]];
+    let got = '';
+    for (let i = 0; i < w.length; i++) got += (rows[+m[1] - 1 + dr * i] || [])[+m[2] - 1 + dc * i] || '?';
+    assert.strictEqual(got, w);
+  }
 });
