@@ -87,7 +87,7 @@ body { font-family: Lora, Georgia, serif; color: #1d1d1d; margin: 0; }
 .cover .map { height: 2.7in; margin: .3in auto .1in; width: 6in; background: #cfe0d3;
   -webkit-mask: url(${img('up_outline.png')}) center/contain no-repeat; mask: url(${img('up_outline.png')}) center/contain no-repeat; }
 .cover .count { font-size: 14pt; font-weight: bold; margin-top: .1in; }
-.cover .inside { margin: .2in auto 0; text-align: left; font-size: 11.5pt; line-height: 1.5; width: 4.2in; }
+.cover .inside { margin: .2in auto 0; text-align: left; font-size: 11.5pt; line-height: 1.5; width: 5in; }
 .cover .inside li { list-style: none; } .cover .inside li:before { content: "✓ "; color: #2f5d3a; font-weight: bold; }
 .cover .brand { margin-top: auto; font-weight: bold; color: #2f5d3a; font-size: 13pt; }
 .cover .branch { position: absolute; width: 1.5in; opacity: .85; }
