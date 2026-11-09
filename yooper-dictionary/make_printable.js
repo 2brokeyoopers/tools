@@ -69,7 +69,7 @@ const grid = (key) => '<table class="' + (key ? 'key' : 'ws') + '">' + g.map((ro
 const src = {};
 for (const w of WORDS) { const k = w.source.name; (src[k] = src[k] || { url: w.source.url, n: 0 }).n++; }
 const srcList = Object.entries(src).sort((a, b) => a[0].localeCompare(b[0]))
-  .map(([n, v]) => `<li>${esc(n)} <span class="u">(${esc(v.url.split('/')[2].replace(/^www\./, ''))})</span></li>`).join('');
+  .map(([n, v]) => `<li>${esc(n)}${/wikipedia\.org/.test(v.url) ? '' : ` <span class="u">(${esc(v.url.split('/')[2].replace(/^www\./, ''))})</span>`}</li>`).join('');
 const factSrc = EXTRAS.facts.map((f, i) => `<li>Fun fact ${i + 1}: ${esc(f.source)} <span class="u">(${esc(f.url.split('/')[2].replace(/^www\./, ''))})</span></li>`).join('');
 
 const say = WORDS.filter(w => w.say && EXTRAS.sayKey.includes(w.term)).sort((a, b) => a.term.localeCompare(b.term))
@@ -83,7 +83,7 @@ const COLOR_CSS = `
   .letter { background: #2f5d3a; color: #fff; border: 0; padding: 1px 8px; border-radius: 4px; }
   .e b { color: #1f4a2b; } .e i { color: #b5651d; }
   .facts li::marker { color: #b5651d; font-weight: bold; }
-  .keybox { background: #f1f6f2; padding: 8px; border-radius: 6px; }
+  .keybox { background: #f1f6f2; padding: 8px; border-radius: 6px; align-self: flex-start; }
   .ws td { background: #f6faf6; border-color: #9cbfa5; }
   .joke { background: #fff6e8; border-color: #b5651d; }
   .end { border-top-color: #b5651d; }
@@ -123,13 +123,13 @@ h2 { font-size: 17pt; color: #2f5d3a; margin: 0 0 .06in; border-bottom: 2px soli
 .deco { display: flex; justify-content: space-around; align-items: flex-end; margin-top: .15in; } .deco img { height: 1.9in; }
 .ws { border-collapse: collapse; margin: .05in auto; } .ws td { width: .4in; height: .4in; text-align: center; font: bold 15pt Lora, Georgia, serif; border: 1px solid #c9d6cc; }
 .wsrow { display: flex; gap: .25in; align-items: flex-start; }
-.find { font-size: 10.5pt; columns: 1; } .find li { list-style: none; } .find li:before { content: "□ "; }
+.find { font-size: 10.5pt; columns: 1; font-family: Lora, Georgia, serif; padding-left: 0; } .find li { list-style: none; margin: 1px 0; } .find li:before { content: ""; display: inline-block; width: 9px; height: 9px; border: 1.2px solid #2f5d3a; margin-right: 6px; vertical-align: 0; }
 .beagle { width: 1.6in; margin-top: .15in; }
 .bubble { font-size: 9.5pt; font-style: italic; border: 1px solid #2f5d3a; border-radius: 8px; padding: 4px 7px; margin-top: .05in; }
 .key { border-collapse: collapse; transform: rotate(180deg); } .key td { width: .17in; height: .17in; font: 7pt Georgia, serif; text-align: center; border: 1px solid #eee; } .key td.hit { background: #e3eee5; }
 .answer { font-size: 8pt; color: #555; margin-top: .15in; transform: rotate(180deg); line-height: 1.4; }
 .sources { columns: 2; column-gap: .25in; font-size: 7.9pt; line-height: 1.18; padding-left: .15in; margin: .04in 0; } .sources li { break-inside: avoid; margin-bottom: 1px; }
-.u { color: #666; }
+.u { color: #666; } .nb { white-space: nowrap; }
 .joke { font-size: 9.5pt; margin: .08in 0; padding: .06in .1in; border: 1px dashed #2f5d3a; border-radius: 6px; }
 .end { text-align: center; font-size: 10.5pt; margin-top: .1in; border-top: 2px solid #2f5d3a; padding-top: .05in; } .end p { margin: .03in 0; }
 .end .slogan { font-weight: bold; color: #2f5d3a; margin-top: .06in; }
@@ -176,11 +176,11 @@ ${ed === 'color' ? COLOR_CSS : ''}
   <div class="wsrow">${grid(false)}
     <div><ul class="find">${EXTRAS.wordSearch.words.map(w => `<li>${esc(w)}</li>`).join('')}</ul>
       <img class="beagle" src="${img('beagle_psf_pd_ink_keyed.png')}" alt="">
-      <div class="bubble">${esc(EXTRAS.wordSearch.dogLine)}</div></div></div>
+      <div class="bubble">${esc(EXTRAS.wordSearch.dogLine.replace("{row}", placed.find(x => x.w === "YOOPER").r0 + 1))}</div></div></div>
   <div class="answer"><b>Answer key</b> (row from the top, column from the left):
     <span class="keylist">${EXTRAS.wordSearch.words.map(w => { const p = placed.find(x => x.w === w.toUpperCase());
       const dir = p.dr === 0 ? 'across' : p.dc === 0 ? 'down' : p.dr === 1 ? 'slant down' : 'slant up';
-      return `${esc(w)} row ${p.r0 + 1}, column ${p.c0 + 1}, ${dir}`; }).join(' · ')}</span></div>
+      return `<span class="nb">${esc(w)} row ${p.r0 + 1}, column ${p.c0 + 1}, ${dir}</span>`; }).join(' · ')}</span></div>
 </section>
 
 <section class="page">
