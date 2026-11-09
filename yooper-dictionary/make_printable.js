@@ -70,7 +70,7 @@ const src = {};
 for (const w of WORDS) { const k = w.source.name; (src[k] = src[k] || { url: w.source.url, n: 0 }).n++; }
 const srcList = Object.entries(src).sort((a, b) => a[0].localeCompare(b[0]))
   .map(([n, v]) => `<li>${esc(n)}${/wikipedia\.org/.test(v.url) ? '' : ` <span class="u">(${esc(v.url.split('/')[2].replace(/^www\./, ''))})</span>`}</li>`).join('');
-const factSrc = EXTRAS.facts.map((f, i) => `<li>Fun fact ${i + 1}: ${esc(f.source)} <span class="u">(${esc(f.url.split('/')[2].replace(/^www\./, ''))})</span></li>`).join('');
+const factSrc = EXTRAS.facts.map((f, i) => `<li>Fun fact ${i + 1}: ${esc(f.source)}${/wikipedia\.org/.test(f.url) ? '' : ` <span class="u">(${esc(f.url.split('/')[2].replace(/^www\./, ''))})</span>`}</li>`).join('');
 
 const say = WORDS.filter(w => w.say && EXTRAS.sayKey.includes(w.term)).sort((a, b) => a.term.localeCompare(b.term))
   .map(w => `<tr><td><b>${esc(w.term)}</b></td><td>${esc(w.say)}</td></tr>`).join('');
