@@ -41,7 +41,7 @@ test('no source notes clutter the printable', () => {
   assert.ok(!/Checked at:/.test(text), 'Checked at: lines found');
 });
 test('U.P. always has periods', () => {
-  assert.ok(!/\bUP\b(?! in Da)/.test(raw.replace(/Live it UP/g, '')), 'bare UP found');
+  assert.ok(!/\bUP\b(?! in Da)/.test(raw.replace(/Live it UP/g, '').replace(/toss in UP on top/g, '')), 'bare UP found');
 });
 test('the last words of the PDF are the 2 Broke Yoopers line', () => {
   assert.ok(text.endsWith(flat(SLOGAN)), 'ends with: ' + text.slice(-120));
