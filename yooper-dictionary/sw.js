@@ -1,5 +1,5 @@
 // Yooper Dictionary service worker - offline app shell
-const CACHE = 'yooper-dict-v3';
+const CACHE = 'yooper-dict-v5';
 const ASSETS = ['.', 'index.html', 'words.js', 'dictionary.js', 'manifest.webmanifest', 'icon-192.png', 'icon-512.png'];
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)).then(() => self.skipWaiting()));

@@ -87,7 +87,7 @@ Card: dictionary, in company plan 6.26\2BY_CURRENT_STATE_READ_FIRST.txt
 [ ] 2. Shirts and other print-on-demand items from the funniest words. Gemini: Yooper slang shirts sell well in the U.P. Goes through the normal design rules and Mike's approval.
 [ ] 3. Facebook post on the 2BY Page asking fans for more words, linking the page. Gemini: free reach and new words. New kind of post, so Mike sees it first (rulebook overrides Gemini's "no approval").
 [ ] 4. Button on 2brokeyoopers.com linking the dictionary. Gemini: steady free traffic. Mike clicks Publish in Carrd (website card rule).
-[ ] 5. Sell the printable on its own on Payhip and Etsy at $3.99 (Gemini's price). Gemini ranked it last because the web page is free. Mike approves the listing and price.
+[x] 5. Paid printable LIVE at $1.99: etsy.com/listing/4612158542 and payhip.com/b/EQ4GA. v2 2026-11-08 after Mike's review: two 9-page PDFs (Yooper-Dictionary-Color-Edition.pdf and Yooper-Dictionary-Ink-Saver-Edition.pdf), 11 pt type, n. = noun key, TroUPer joke, 300-inch snow fact. Second outside audit (fresh Claude agent) B with 16 fixes, all done; Gemini Pro A, PUBLISH: YES on PDFs and photos; Gemini says town names stay. Built by node yooper-dictionary/make_printable.js, checked by node --test yooper-dictionary/tests/printable.test.js (run with YD_PDF set to each edition). PDFs are kept OUT of this public repo; the copies for sale are in C:\Users\mjjoh\OneDrive\Desktop\company plan 6.26\projects\Yooper Dictionary.
 Later, not ranked: a suggest-a-word form on the page, real recordings for the Hear it button.
 
 WHAT IS IN THE DICTIONARY FOLDER
