@@ -187,7 +187,7 @@ ${ed === 'color' ? COLOR_CSS : ''}
   <h2>Where the words come from</h2>
   <p class="how">Every word and meaning was checked against these pages. Thank you to every writer, newspaper, museum and Yooper who wrote these down first!</p>
   <ul class="sources">${srcList}${factSrc}</ul>
-  <p class="joke"><b>TroUPer:</b> source? Us. We made that one up ourselves, right here at 2 Broke Yoopers. Every real dictionary had to start somewhere, eh. If you hear it at camp, you heard it here first.</p>
+  <p class="joke"><b>TroUPer:</b> source? Us. We came up with that one ourselves, right here at 2 Broke Yoopers. Start with Troll, add Yooper, and toss in UP on top and you have the recipe for a mighty fine name. We were thinking of some great friends from Royal Oak in case you were wondering. Hope it catches on!</p>
   <div class="end">
     <p>Know a word we missed? Please send it to 2brokeyoopers@gmail.com. Thank you!</p>
     <p>Shirts, books and more printables: 2brokeyoopers.com</p>
