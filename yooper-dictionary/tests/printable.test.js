@@ -7,7 +7,7 @@ const fs = require('fs');
 const { execFileSync } = require('child_process');
 
 const WORDS = require('../words.js');
-const PDF = process.env.YD_PDF || path.join(__dirname, '..', 'printable', 'Yooper Dictionary - printable.pdf');
+const PDF = process.env.YD_PDF || path.join(__dirname, '..', 'printable', 'Yooper Dictionary - printable (ink saver).pdf');
 const SLOGAN = 'From 2 Broke Yoopers — affordable products built for fun, function, and honest value.';
 const flat = s => s.normalize('NFC').replace(/[‘’]/g, "'").replace(/[“”]/g, '"').replace(/\s+/g, ' ').trim();
 
@@ -64,7 +64,7 @@ test('the word search lists all 15 words', () => {
 });
 test('at least a cover page plus word pages, and not over 20 pages', () => {
   const n = +((info.match(/Pages:\s+(\d+)/) || [])[1] || 0);
-  assert.ok(n >= 5 && n <= 8, 'pages: ' + n);
+  assert.ok(n >= 5 && n <= 12, 'pages: ' + n);
 });
 test('every answer key position really spells its word in the printed grid', () => {
   const E = require('../printable/extras.js');

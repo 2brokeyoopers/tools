@@ -9,7 +9,10 @@ const WORDS = require('./words.js');
 const EXTRAS = require('./printable/extras.js');
 const { sortAZ } = require('./dictionary.js');
 
-const OUT = path.join(__dirname, 'printable', 'Yooper Dictionary - printable.pdf');
+const EDITIONS = {
+  inksaver: { file: 'Yooper Dictionary - printable (ink saver).pdf', label: 'Ink saver edition' },
+  color: { file: 'Yooper Dictionary - printable (color).pdf', label: 'Color edition' }
+};
 const ART = path.join(__dirname, 'printable', 'art');
 const SLOGAN = 'From 2 Broke Yoopers — affordable products built for fun, function, and honest value.';
 const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -72,7 +75,20 @@ const factSrc = EXTRAS.facts.map((f, i) => `<li>Fun fact ${i + 1}: ${esc(f.sourc
 const say = WORDS.filter(w => w.say && EXTRAS.sayKey.includes(w.term)).sort((a, b) => a.term.localeCompare(b.term))
   .map(w => `<tr><td><b>${esc(w.term)}</b></td><td>${esc(w.say)}</td></tr>`).join('');
 
-const html = `<!doctype html><html><head><meta charset="utf-8"><style>
+const COLOR_CSS = `
+  .cover { background: linear-gradient(#e6f0e8, #fff 55%); border: 6px solid #2f5d3a; }
+  .cover .map { background: #3f7a4f; }
+  .cover h1 { color: #1f4a2b; }
+  h2 { background: #2f5d3a; color: #fff; border: 0; padding: 4px 10px; border-radius: 4px; }
+  .letter { background: #2f5d3a; color: #fff; border: 0; padding: 1px 8px; border-radius: 4px; }
+  .e b { color: #1f4a2b; } .e i { color: #b5651d; }
+  .facts li::marker { color: #b5651d; font-weight: bold; }
+  .keybox { background: #f1f6f2; padding: 8px; border-radius: 6px; }
+  .ws td { background: #f6faf6; border-color: #9cbfa5; }
+  .joke { background: #fff6e8; border-color: #b5651d; }
+  .end { border-top-color: #b5651d; }
+`;
+const build = (ed) => `<!doctype html><html><head><meta charset="utf-8"><style>
 @page { size: 8.5in 11in; margin: 0.5in 0.55in 0.55in; }
 * { box-sizing: border-box; }
 body { font-family: Lora, Georgia, serif; color: #1d1d1d; margin: 0; }
@@ -94,10 +110,10 @@ body { font-family: Lora, Georgia, serif; color: #1d1d1d; margin: 0; }
 .cover .b1 { left: .25in; top: .2in; transform: rotate(-15deg); } .cover .b2 { right: .2in; bottom: .5in; transform: rotate(160deg); }
 /* dictionary */
 h2 { font-size: 17pt; color: #2f5d3a; margin: 0 0 .06in; border-bottom: 2px solid #2f5d3a; }
-.how { font-size: 8.5pt; color: #444; margin: 0 0 .08in; }
-.dict { column-count: 3; column-gap: .22in; column-rule: 1px solid #c9d6cc; font-size: 8.6pt; line-height: 1.25; }
-.letter { font-size: 13pt; font-weight: bold; color: #2f5d3a; border-bottom: 1px solid #2f5d3a; margin: .04in 0 .03in; break-after: avoid; }
-.e { margin: 0 0 .045in; break-inside: avoid; } .e i { color: #2f5d3a; } .say { color: #555; }
+.how { font-size: 10pt; color: #444; margin: 0 0 .1in; }
+.dict { column-count: 2; column-gap: .35in; column-rule: 1px solid #c9d6cc; font-size: 11pt; line-height: 1.32; }
+.letter { font-size: 16pt; font-weight: bold; color: #2f5d3a; border-bottom: 1px solid #2f5d3a; margin: .04in 0 .03in; break-after: avoid; }
+.e { margin: 0 0 .07in; break-inside: avoid; } .e i { color: #2f5d3a; } .say { color: #555; }
 /* extras */
 .two { display: flex; gap: .3in; }
 .facts { flex: 1.35; font-size: 11pt; line-height: 1.4; } .facts ol { padding-left: .22in; margin: 0; } .facts li { margin-bottom: .07in; }
@@ -112,16 +128,18 @@ h2 { font-size: 17pt; color: #2f5d3a; margin: 0 0 .06in; border-bottom: 2px soli
 .bubble { font-size: 9.5pt; font-style: italic; border: 1px solid #2f5d3a; border-radius: 8px; padding: 4px 7px; margin-top: .05in; }
 .key { border-collapse: collapse; transform: rotate(180deg); } .key td { width: .17in; height: .17in; font: 7pt Georgia, serif; text-align: center; border: 1px solid #eee; } .key td.hit { background: #e3eee5; }
 .answer { font-size: 8pt; color: #555; margin-top: .15in; transform: rotate(180deg); line-height: 1.4; }
-.sources { columns: 2; column-gap: .25in; font-size: 7.9pt; line-height: 1.22; padding-left: .15in; margin: .04in 0; } .sources li { break-inside: avoid; margin-bottom: 1px; }
+.sources { columns: 2; column-gap: .25in; font-size: 7.9pt; line-height: 1.18; padding-left: .15in; margin: .04in 0; } .sources li { break-inside: avoid; margin-bottom: 1px; }
 .u { color: #666; }
-.end { text-align: center; font-size: 10.5pt; margin-top: .12in; border-top: 2px solid #2f5d3a; padding-top: .08in; }
+.joke { font-size: 9.5pt; margin: .08in 0; padding: .06in .1in; border: 1px dashed #2f5d3a; border-radius: 6px; }
+.end { text-align: center; font-size: 10.5pt; margin-top: .1in; border-top: 2px solid #2f5d3a; padding-top: .05in; } .end p { margin: .03in 0; }
 .end .slogan { font-weight: bold; color: #2f5d3a; margin-top: .06in; }
+${ed === 'color' ? COLOR_CSS : ''}
 </style></head><body>
 
 <section class="page cover">
   <img class="branch b1" src="${img('hemlock_branch_psf_ink_keyed.png')}" alt="">
   <img class="branch b2" src="${img('hemlock_branch_psf_ink_keyed.png')}" alt="">
-  <div class="kicker">Printable edition</div>
+  <div class="kicker">Printable ${EDITIONS[ed].label.toLowerCase()}</div>
   <h1>The Yooper Dictionary</h1>
   <div class="sub">How we talk up here in Michigan's Upper Peninsula, eh?</div>
   <div class="map"></div>
@@ -137,7 +155,7 @@ h2 { font-size: 17pt; color: #2f5d3a; margin: 0 0 .06in; border-bottom: 2px soli
 
 <section class="page">
   <h2>The words, A to Z</h2>
-  <p class="how">Each word gives how to say it (when that helps), what kind of word it is, and a plain meaning. n. = thing, v. = action, adj. = describing word, phr. = saying, interj. = something you blurt out. The free, searchable phone version with an example for every word is at 2brokeyoopers.github.io/tools/yooper-dictionary.</p>
+  <p class="how">Each word gives how to say it (when that helps), what kind of word it is, and a plain meaning. n. = noun, v. = verb, adj. = adjective, adv. = adverb, pron. = pronoun, art. = article, phr. = phrase, interj. = interjection. The free, searchable phone version with an example for every word is at 2brokeyoopers.github.io/tools/yooper-dictionary.</p>
   <div class="dict">${dict}</div>
 </section>
 
@@ -169,6 +187,7 @@ h2 { font-size: 17pt; color: #2f5d3a; margin: 0 0 .06in; border-bottom: 2px soli
   <h2>Where the words come from</h2>
   <p class="how">Every word and meaning was checked against these pages. Thank you to every writer, newspaper, museum and Yooper who wrote these down first!</p>
   <ul class="sources">${srcList}${factSrc}</ul>
+  <p class="joke"><b>TroUPer:</b> source? Us. We made that one up ourselves, right here at 2 Broke Yoopers. Every real dictionary had to start somewhere, eh. If you hear it at camp, you heard it here first.</p>
   <div class="end">
     <p>Know a word we missed? Please send it to 2brokeyoopers@gmail.com. Thank you!</p>
     <p>Shirts, books and more printables: 2brokeyoopers.com</p>
@@ -180,9 +199,11 @@ h2 { font-size: 17pt; color: #2f5d3a; margin: 0 0 .06in; border-bottom: 2px soli
 (async () => {
   const browser = await chromium.launch();
   const page = await browser.newPage();
-  await page.setContent(html, { waitUntil: 'load' });
-  await page.pdf({ path: OUT, format: 'Letter', printBackground: true, preferCSSPageSize: true });
-  if (process.env.YD_HTML) fs.writeFileSync(process.env.YD_HTML, html);
+  for (const ed of Object.keys(EDITIONS)) {
+    const out = path.join(__dirname, 'printable', EDITIONS[ed].file);
+    await page.setContent(build(ed), { waitUntil: 'load' });
+    await page.pdf({ path: out, format: 'Letter', printBackground: true, preferCSSPageSize: true });
+    console.log('Wrote ' + out);
+  }
   await browser.close();
-  console.log('Wrote ' + OUT);
 })();
