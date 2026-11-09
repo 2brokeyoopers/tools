@@ -10,8 +10,8 @@ const EXTRAS = require('./printable/extras.js');
 const { sortAZ } = require('./dictionary.js');
 
 const EDITIONS = {
-  inksaver: { file: 'Yooper Dictionary - printable (ink saver).pdf', label: 'Ink saver edition' },
-  color: { file: 'Yooper Dictionary - printable (color).pdf', label: 'Color edition' }
+  inksaver: { file: 'Yooper-Dictionary-Ink-Saver-Edition.pdf', label: 'Ink saver edition' },
+  color: { file: 'Yooper-Dictionary-Color-Edition.pdf', label: 'Color edition' }
 };
 const ART = path.join(__dirname, 'printable', 'art');
 const SLOGAN = 'From 2 Broke Yoopers — affordable products built for fun, function, and honest value.';

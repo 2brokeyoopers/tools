@@ -7,7 +7,7 @@ const fs = require('fs');
 const { execFileSync } = require('child_process');
 
 const WORDS = require('../words.js');
-const PDF = process.env.YD_PDF || path.join(__dirname, '..', 'printable', 'Yooper Dictionary - printable (ink saver).pdf');
+const PDF = process.env.YD_PDF || path.join(__dirname, '..', 'printable', 'Yooper-Dictionary-Ink-Saver-Edition.pdf');
 const SLOGAN = 'From 2 Broke Yoopers — affordable products built for fun, function, and honest value.';
 const flat = s => s.normalize('NFC').replace(/[‘’]/g, "'").replace(/[“”]/g, '"').replace(/\s+/g, ' ').trim();
 
